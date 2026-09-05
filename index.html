@@ -1,0 +1,8304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Staff App</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lobster&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Bungee&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  min-height:100%;
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
+body{
+  min-height:100dvh;
+  overflow:hidden;
+  font-family:"Inter",sans-serif;
+  background:#fff;
+  color:#1b2939;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+body:not(.ready) #loginScreen,
+body:not(.ready) #mainScreen{
+  visibility:hidden !important;
+}
+
+.screen{
+  width:100%;
+  min-height:100dvh;
+}
+
+.hidden{
+  display:none !important;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginScreen{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px 23px 110px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.top-design{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:128px;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.top-shape{
+  position:absolute;
+  top:-94px;
+  left:-6%;
+  width:112%;
+  height:185px;
+  background:#244e69;
+  border-radius:0 0 46% 54%;
+  transform:rotate(-2deg);
+}
+
+.top-shape-light{
+  position:absolute;
+  top:-108px;
+  right:-70px;
+  width:230px;
+  height:190px;
+  border-radius:50%;
+  background:#7eb0cb;
+  opacity:.55;
+}
+
+.top-dot{
+  position:absolute;
+  top:65px;
+  right:38px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#b9d9e9;
+}
+
+.top-dot-small{
+  position:absolute;
+  top:91px;
+  right:67px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#d9edf7;
+}
+
+.login{
+  position:relative;
+  z-index:10;
+  width:100%;
+  max-width:360px;
+}
+
+.login-head{
+  width:100%;
+  text-align:center;
+  margin-bottom:35px;
+}
+
+.login-small{
+  margin-bottom:5px;
+  color:#84919f;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.login-title{
+  margin:0;
+  font-family:"Lobster",cursive;
+  color:#1d2d40;
+  font-size:40px;
+  font-weight:400;
+  line-height:1.15;
+}
+
+.field{
+  margin-bottom:17px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  color:#657385;
+  font-size:10px;
+  font-weight:600;
+}
+
+.input-wrap{
+  position:relative;
+}
+
+.input-wrap input{
+  width:100%;
+  height:53px;
+  border:1px solid #e0e6eb;
+  border-radius:12px;
+  outline:none;
+  background:#fff;
+  padding:0 45px 0 43px;
+  color:#1d2d40;
+  font-size:16px;
+  transition:border-color .18s ease,box-shadow .18s ease;
+}
+
+.input-wrap input:focus{
+  border-color:#82aabe;
+  box-shadow:0 0 0 3px rgba(49,95,125,.07);
+}
+
+.input-wrap input::placeholder{
+  color:#a8b1ba;
+}
+
+.input-icon{
+  position:absolute;
+  left:16px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#8297a6;
+  font-size:12px;
+  pointer-events:none;
+}
+
+.eye-btn{
+  position:absolute;
+  right:5px;
+  top:50%;
+  transform:translateY(-50%);
+  width:40px;
+  height:40px;
+  border:0;
+  background:transparent;
+  color:#8999a7;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+}
+
+.options{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:4px 1px 26px;
+}
+
+.remember{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#7c8997;
+  font-size:9px;
+}
+
+.remember input{
+  width:14px;
+  height:14px;
+  accent-color:#294f68;
+}
+
+.forgot{
+  border:0;
+  background:transparent;
+  color:#477e9d;
+  font-size:9px;
+  font-weight:600;
+}
+
+.login-btn{
+  width:100%;
+  height:53px;
+  border:0;
+  border-radius:12px;
+  background:#294f68;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-size:12px;
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(41,79,104,.13);
+}
+
+.login-btn:disabled{
+  cursor:default;
+}
+
+.spinner{
+  display:none;
+  font-size:13px;
+  animation:spin .7s linear infinite;
+}
+
+.success-check{
+  display:none;
+  width:21px;
+  height:21px;
+  border-radius:50%;
+  background:#fff;
+  color:#294f68;
+  align-items:center;
+  justify-content:center;
+  font-size:9px;
+}
+
+.login-btn.loading .btn-text{
+  display:none;
+}
+
+.login-btn.loading .spinner{
+  display:block;
+}
+
+.login-btn.success .btn-text,
+.login-btn.success .spinner{
+  display:none;
+}
+
+.login-btn.success .success-check{
+  display:flex;
+  animation:tickPop .4s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.company-footer{
+  position:absolute;
+  left:0;
+  bottom:24px;
+  width:100%;
+  text-align:center;
+}
+
+.company-line{
+  width:100%;
+  height:1px;
+  margin-bottom:12px;
+  background:#e2e7eb;
+}
+
+.company-name{
+  color:#98a2ad;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.35px;
+}
+
+
+/* =========================================================
+   MAIN APP
+========================================================= */
+
+#mainScreen{
+  position:relative;
+  height:100dvh;
+  overflow:hidden;
+  background:#f7f9fb;
+}
+
+/* HEADER */
+
+.main-header{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  z-index:30;
+
+  min-height:calc(92px + env(safe-area-inset-top));
+
+  padding:
+    calc(40px + env(safe-area-inset-top))
+    15px
+    10px;
+
+  display:flex;
+  align-items:center;
+
+  background:#fff;
+
+  border-bottom:1px solid #edf0f3;
+}
+
+.brand-wrap{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.restaurant-logo{
+  width:35px;
+  height:35px;
+  flex:0 0 35px;
+  object-fit:contain;
+  border-radius:8px;
+  display:none;
+}
+
+.restaurant-logo.show{
+  display:block;
+}
+
+.restaurant-logo-fallback{
+  width:35px;
+  height:35px;
+  flex:0 0 35px;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#294f68;
+  color:#fff;
+  font-size:12px;
+}
+
+.restaurant-logo-fallback.hidden-logo{
+  display:none;
+}
+
+.brand-name{
+  min-width:0;
+  max-width:calc(100vw - 80px);
+  color:#203246;
+
+  font-family:"Bungee", sans-serif !important;
+  font-size:17px;
+  font-weight:400 !important;
+  line-height:1.15;
+  letter-spacing:.2px;
+
+  text-transform:uppercase;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* SCROLL */
+
+.main-scroll{
+  position:absolute;
+  top:calc(92px + env(safe-area-inset-top));
+  bottom:calc(64px + env(safe-area-inset-bottom));
+  left:0;
+  right:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  background:#f7f9fb;
+}
+
+.tab-page{
+  display:none;
+  min-height:100%;
+  padding:18px 14px 28px;
+}
+
+.tab-page.active{
+  display:block;
+}
+
+/* HOME CONTENT */
+
+#homePage{
+  padding-top:16px;
+}
+
+.home-items-area{
+  width:100%;
+  min-height:calc(
+    100dvh
+    - 92px
+    - env(safe-area-inset-top)
+    - 64px
+    - env(safe-area-inset-bottom)
+    - 44px
+  );
+}
+
+/* Zero items / error should stay visually centered */
+.home-items-area > .empty-state,
+.home-items-area > .load-error,
+.home-items-area > .data-loading{
+  min-height:calc(
+    100dvh
+    - 92px
+    - env(safe-area-inset-top)
+    - 64px
+    - env(safe-area-inset-bottom)
+    - 50px
+  );
+}
+
+
+/* SECTION */
+
+.section-head{
+  margin-bottom:14px;
+}
+
+.section-title{
+  color:#26384b;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:-.4px;
+}
+
+.section-sub{
+  margin-top:4px;
+  color:#8a96a2;
+  font-size:9px;
+}
+
+
+/* LOADING */
+
+.data-loading{
+  min-height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.data-loading i{
+  color:#6f8292;
+  font-size:18px;
+  animation:spin .75s linear infinite;
+}
+
+
+/* ITEMS */
+
+.items-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.item-card{
+  min-width:0;
+  padding:12px;
+  border:1px solid #e7ebef;
+  border-radius:13px;
+  background:#fff;
+}
+
+.item-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.item-type-dot{
+  width:10px;
+  height:10px;
+  flex:0 0 10px;
+  border:1px solid #2c8c57;
+  display:grid;
+  place-items:center;
+  margin-top:2px;
+}
+
+.item-type-dot::after{
+  content:"";
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#2c8c57;
+}
+
+.item-type-dot.nonveg{
+  border-color:#b34b4b;
+}
+
+.item-type-dot.nonveg::after{
+  background:#b34b4b;
+}
+
+.item-name{
+  flex:1;
+  min-width:0;
+  color:#26374a;
+  font-size:11px;
+  font-weight:700;
+  line-height:1.35;
+}
+
+.item-category{
+  margin-top:7px;
+  min-height:13px;
+  color:#8995a1;
+  font-size:8px;
+  line-height:1.4;
+}
+
+.item-bottom{
+  margin-top:11px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.item-price{
+  color:#294f68;
+  font-size:11px;
+  font-weight:700;
+}
+
+.item-status{
+  font-size:8px;
+  font-weight:600;
+  color:#388362;
+}
+
+.item-status.off{
+  color:#a16068;
+}
+
+
+/* EMPTY */
+
+.empty-state{
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.empty-state i{
+  margin-bottom:12px;
+  color:#93a1ad;
+  font-size:24px;
+}
+
+.empty-state strong{
+  color:#435467;
+  font-size:12px;
+}
+
+.empty-state span{
+  margin-top:5px;
+  max-width:250px;
+  color:#909ca7;
+  font-size:9px;
+  line-height:1.5;
+}
+
+
+/* ERROR */
+
+.load-error{
+  min-height:220px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+}
+
+.load-error i{
+  margin-bottom:10px;
+  color:#a36369;
+  font-size:20px;
+}
+
+.load-error strong{
+  color:#6e4a4e;
+  font-size:11px;
+}
+
+.load-error span{
+  margin-top:6px;
+  max-width:280px;
+  color:#9a7c80;
+  font-size:8px;
+  line-height:1.5;
+}
+
+
+/* PROFILE */
+
+.profile-card{
+  padding:16px;
+  border:1px solid #e5eaee;
+  border-radius:14px;
+  background:#fff;
+}
+
+.profile-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.profile-avatar{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#294f68;
+  color:#fff;
+  font-size:14px;
+}
+
+.profile-copy{
+  min-width:0;
+}
+
+.profile-name{
+  color:#26384b;
+  font-size:13px;
+  font-weight:700;
+}
+
+.profile-role{
+  margin-top:3px;
+  color:#87939f;
+  font-size:9px;
+  text-transform:capitalize;
+}
+
+.profile-divider{
+  width:100%;
+  height:1px;
+  margin:15px 0;
+  background:#edf0f2;
+}
+
+.profile-row{
+  padding:7px 0;
+}
+
+.profile-row small{
+  display:block;
+  margin-bottom:3px;
+  color:#99a3ad;
+  font-size:8px;
+}
+
+.profile-row strong{
+  display:block;
+  color:#485969;
+  font-size:10px;
+  font-weight:600;
+}
+
+.profile-logout{
+  width:100%;
+  height:42px;
+  margin-top:14px;
+  border:1px solid #eadfe1;
+  border-radius:10px;
+  background:#fff;
+  color:#9b4f58;
+  font-size:10px;
+  font-weight:700;
+}
+
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:40;
+  width:100%;
+  min-height:calc(64px + env(safe-area-inset-bottom));
+
+  padding-bottom:env(safe-area-inset-bottom);
+
+  display:flex;
+  align-items:stretch;
+
+  background:#fff;
+
+  border-top:1px solid #e4e9ed;
+}
+
+.nav-btn{
+  flex:1 1 0;
+  min-width:0;
+  border:0;
+  background:#fff;
+  color:#97a2ac;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  font-size:8px;
+  font-weight:600;
+}
+
+.nav-btn i{
+  font-size:16px;
+}
+
+.nav-btn.active{
+  color:#294f68;
+}
+
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:78px;
+  transform:translate(-50%,15px);
+  max-width:calc(100vw - 40px);
+  padding:10px 14px;
+  border-radius:9px;
+  background:#29394a;
+  color:#fff;
+  font-size:10px;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .2s ease,transform .22s ease,visibility .22s ease;
+  z-index:99999;
+}
+
+.toast.show{
+  opacity:1;
+  visibility:visible;
+  transform:translate(-50%,0);
+}
+
+.toast.error{
+  background:#a64b55;
+}
+
+.toast.success{
+  background:#34745b;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+@keyframes tickPop{
+  0%{
+    opacity:0;
+    transform:scale(.5);
+  }
+  65%{
+    opacity:1;
+    transform:scale(1.15);
+  }
+  100%{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+@media(min-width:700px){
+  .items-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+}
+
+@media(max-width:500px){
+
+  .main-header{
+    min-height:calc(92px + env(safe-area-inset-top));
+
+    padding:
+      calc(40px + env(safe-area-inset-top))
+      15px
+      10px;
+  }
+
+  .main-scroll{
+    top:calc(92px + env(safe-area-inset-top));
+  }
+
+  #loginScreen{
+    padding:max(24px,env(safe-area-inset-top)) 22px 105px;
+  }
+
+  .login{
+    max-width:100%;
+  }
+
+  .top-design{
+    height:115px;
+  }
+
+  .top-shape{
+    top:-100px;
+    height:180px;
+  }
+
+  .top-shape-light{
+    top:-115px;
+    right:-85px;
+    width:220px;
+    height:185px;
+  }
+
+  .login-title{
+    font-size:39px;
+  }
+
+  .company-footer{
+    bottom:20px;
+  }
+}
+
+/* FORCE BUSINESS BRAND FONT */
+#mainBrandName,
+.brand-name{
+  font-family:"Bungee", sans-serif !important;
+  font-weight:400 !important;
+  text-transform:uppercase !important;
+}
+
+
+/* =========================================================
+   HOME MENU V2 - CATEGORY + SMALL IMAGE CARDS + ADD
+========================================================= */
+
+#homePage{
+  padding:12px 10px 90px;
+}
+
+.home-items-area.items-grid{
+  display:block;
+}
+
+.menu-category-section{
+  margin-bottom:18px;
+}
+
+.menu-category-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+  padding:0 2px;
+}
+
+.menu-category-title{
+  color:#26384b;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:-.15px;
+}
+
+.menu-category-count{
+  color:#8d99a5;
+  font-size:7px;
+  font-weight:600;
+}
+
+.menu-category-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+
+.menu-item-card{
+  min-width:0;
+  border:1px solid #e5eaee;
+  border-radius:10px;
+  background:#fff;
+  overflow:hidden;
+}
+
+.menu-item-image-wrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:1.45/1;
+  background:#f1f4f6;
+  overflow:hidden;
+}
+
+.menu-item-image{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+.menu-item-image-empty{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  color:#9ba8b3;
+  font-size:16px;
+}
+
+.menu-item-type-badge{
+  position:absolute;
+  top:6px;
+  left:6px;
+  width:14px;
+  height:14px;
+  border:1px solid #2c8c57;
+  background:#fff;
+  display:grid;
+  place-items:center;
+}
+
+.menu-item-type-badge::after{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#2c8c57;
+}
+
+.menu-item-type-badge.nonveg{
+  border-color:#b34b4b;
+}
+
+.menu-item-type-badge.nonveg::after{
+  background:#b34b4b;
+}
+
+.menu-item-body{
+  padding:7px;
+}
+
+.menu-item-name{
+  min-height:26px;
+  color:#2d3e51;
+  font-size:8.5px;
+  line-height:1.4;
+  font-weight:750;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.menu-item-bottom{
+  margin-top:6px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+}
+
+.menu-item-price{
+  color:#294f68;
+  font-size:9px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.menu-add-btn{
+  min-width:48px;
+  height:26px;
+  border:1px solid #cbd9e3;
+  border-radius:7px;
+  background:#fff;
+  color:#294f68;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:0 8px;
+  font-size:7px;
+  font-weight:800;
+}
+
+.menu-add-btn:disabled{
+  opacity:.45;
+}
+
+.menu-qty-control{
+  height:26px;
+  border:1px solid #cbd9e3;
+  border-radius:7px;
+  background:#fff;
+  display:inline-flex;
+  align-items:center;
+  overflow:hidden;
+}
+
+.menu-qty-btn{
+  width:25px;
+  height:25px;
+  border:0;
+  background:#fff;
+  color:#294f68;
+  display:grid;
+  place-items:center;
+  font-size:8px;
+  font-weight:800;
+}
+
+.menu-qty-value{
+  min-width:23px;
+  text-align:center;
+  color:#2d4053;
+  font-size:8px;
+  font-weight:800;
+}
+
+.menu-item-out{
+  min-height:26px;
+  border-radius:7px;
+  background:#f4f5f6;
+  color:#9a6c72;
+  padding:0 7px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:6.5px;
+  font-weight:700;
+}
+
+.cart-summary-bar{
+  position:fixed;
+  left:10px;
+  right:10px;
+  bottom:calc(72px + env(safe-area-inset-bottom));
+  z-index:55;
+  min-height:48px;
+  border-radius:12px;
+  background:#294f68;
+  color:#fff;
+  padding:8px 11px;
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  box-shadow:0 10px 28px rgba(28,48,63,.2);
+}
+
+.cart-summary-bar.show{
+  display:flex;
+}
+
+.cart-summary-copy small{
+  display:block;
+  color:#cbd8e1;
+  font-size:7px;
+}
+
+.cart-summary-copy strong{
+  display:block;
+  margin-top:2px;
+  font-size:11px;
+}
+
+.cart-summary-total{
+  text-align:right;
+}
+
+.cart-summary-total small{
+  display:block;
+  color:#cbd8e1;
+  font-size:7px;
+}
+
+.cart-summary-total strong{
+  display:block;
+  margin-top:2px;
+  font-size:12px;
+}
+
+@media(min-width:700px){
+  .menu-category-grid{
+    grid-template-columns:repeat(6,minmax(0,1fr));
+  }
+}
+
+@media(max-width:380px){
+  .menu-category-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+
+/* =========================================================
+   ZEPTO-LIKE CLEAN MENU STYLE
+   No shake / no harsh movement
+========================================================= */
+
+.menu-item-card{
+  border:1px solid #eee7f1 !important;
+  box-shadow:0 2px 8px rgba(71,39,88,.035);
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease,
+    transform .18s ease;
+}
+
+.menu-item-card:hover{
+  border-color:#eadbea !important;
+  box-shadow:0 4px 14px rgba(82,41,99,.055);
+  transform:translateY(-1px);
+}
+
+.menu-item-image-wrap{
+  background:#faf7fb !important;
+}
+
+.menu-item-price{
+  color:#2d2233 !important;
+}
+
+.menu-add-btn{
+  min-width:52px !important;
+  height:27px !important;
+  border:1px solid #d94f93 !important;
+  border-radius:7px !important;
+  background:#fff !important;
+  color:#c93680 !important;
+  padding:0 10px !important;
+  font-size:7.5px !important;
+  font-weight:800 !important;
+  transition:
+    background-color .16s ease,
+    color .16s ease,
+    border-color .16s ease,
+    opacity .16s ease,
+    transform .16s ease !important;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.menu-add-btn:hover{
+  background:#fff6fb !important;
+}
+
+.menu-add-btn:active{
+  transform:scale(.97) !important;
+}
+
+.menu-qty-control{
+  height:27px !important;
+  border:1px solid #d94f93 !important;
+  border-radius:7px !important;
+  background:#fff6fb !important;
+  overflow:hidden;
+  animation:qtySoftIn .18s ease both;
+}
+
+.menu-qty-btn{
+  width:26px !important;
+  height:26px !important;
+  color:#c93680 !important;
+  background:transparent !important;
+  transition:
+    background-color .15s ease,
+    opacity .15s ease !important;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.menu-qty-btn:hover{
+  background:#fdeaf4 !important;
+}
+
+.menu-qty-btn:active{
+  transform:none !important;
+}
+
+.menu-qty-value{
+  color:#a62c69 !important;
+  min-width:24px !important;
+}
+
+.cart-summary-bar{
+  background:#54234f !important;
+  box-shadow:0 10px 28px rgba(78,31,71,.18) !important;
+  animation:cartSoftUp .22s ease both;
+}
+
+.menu-category-title{
+  color:#302435 !important;
+}
+
+.menu-item-name{
+  color:#34283a !important;
+}
+
+@keyframes qtySoftIn{
+  from{
+    opacity:0;
+    transform:scale(.96);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+@keyframes cartSoftUp{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .menu-item-card,
+  .menu-add-btn,
+  .menu-qty-control,
+  .cart-summary-bar{
+    animation:none !important;
+    transition:none !important;
+    transform:none !important;
+  }
+}
+
+
+/* =========================================================
+   FINAL FIX — TABLE SELECT + BIGGER CARDS + SAFE CART
+========================================================= */
+
+/* Home spacing */
+#homePage{
+  padding:12px 10px 108px !important;
+}
+
+/* ---------- Table selector ---------- */
+
+.home-table-select{
+  width:100%;
+  margin-bottom:13px;
+  padding:10px 11px;
+  border:1px solid #ebe5ec;
+  border-radius:11px;
+  background:#fff;
+}
+
+.home-table-select-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:7px;
+}
+
+.home-table-select-copy{
+  min-width:0;
+}
+
+.home-table-select-copy strong{
+  display:block;
+  color:#34283a;
+  font-size:10px;
+  font-weight:800;
+}
+
+.home-table-select-copy span{
+  display:block;
+  margin-top:2px;
+  color:#8c98a4;
+  font-size:7px;
+}
+
+.home-table-count{
+  flex:0 0 auto;
+  min-height:23px;
+  padding:0 8px;
+  border-radius:999px;
+  background:#faf2f7;
+  color:#b23676;
+  display:inline-flex;
+  align-items:center;
+  font-size:7px;
+  font-weight:800;
+}
+
+.home-table-select-wrap{
+  position:relative;
+  width:100%;
+}
+
+.home-table-select-control{
+  width:100%;
+  height:39px;
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid #ded5df;
+  border-radius:8px;
+  outline:none;
+  background:#fff;
+  color:#403245;
+  padding:0 34px 0 11px;
+  font-size:9px;
+  font-weight:700;
+}
+
+.home-table-select-control:focus{
+  border-color:#ca78a4;
+  box-shadow:0 0 0 3px rgba(201,54,128,.05);
+}
+
+.home-table-select-wrap::after{
+  content:"";
+  position:absolute;
+  right:13px;
+  top:50%;
+  width:6px;
+  height:6px;
+  border-right:1.5px solid #725f75;
+  border-bottom:1.5px solid #725f75;
+  transform:translateY(-70%) rotate(45deg);
+  pointer-events:none;
+}
+
+.home-table-note{
+  display:none;
+  margin-top:6px;
+  color:#b84977;
+  font-size:7px;
+}
+
+.home-table-note.show{
+  display:block;
+}
+
+/* ---------- Slightly bigger menu cards ---------- */
+
+.menu-category-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+
+.menu-item-card,
+.menu-item-card:hover,
+.menu-item-card:active{
+  transform:none !important;
+}
+
+.menu-item-card{
+  border-radius:11px !important;
+}
+
+.menu-item-image-wrap{
+  aspect-ratio:1.55/1 !important;
+}
+
+.menu-item-body{
+  padding:9px !important;
+}
+
+.menu-item-name{
+  min-height:30px !important;
+  font-size:9.3px !important;
+}
+
+.menu-item-price{
+  font-size:10px !important;
+}
+
+.menu-item-bottom{
+  min-height:30px;
+  margin-top:7px !important;
+}
+
+/* fixed control width = no card jump */
+.menu-item-bottom > [data-control-item]{
+  width:82px;
+  min-width:82px;
+  height:29px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+}
+
+.menu-add-btn{
+  width:61px !important;
+  min-width:61px !important;
+  height:29px !important;
+  transform:none !important;
+}
+
+.menu-add-btn:active{
+  transform:none !important;
+}
+
+.menu-qty-control{
+  width:82px !important;
+  min-width:82px !important;
+  height:29px !important;
+  animation:none !important;
+}
+
+.menu-qty-btn{
+  width:27px !important;
+  height:28px !important;
+}
+
+.menu-qty-value{
+  min-width:27px !important;
+}
+
+/* ---------- Cart bar: never cut on small screens ---------- */
+
+.cart-summary-bar{
+  left:8px !important;
+  right:8px !important;
+  bottom:calc(72px + env(safe-area-inset-bottom)) !important;
+  width:auto !important;
+  min-width:0 !important;
+  min-height:54px !important;
+  padding:7px 8px 7px 11px !important;
+  gap:8px !important;
+  overflow:hidden;
+  border-radius:12px !important;
+}
+
+.cart-summary-copy{
+  flex:1 1 auto;
+  min-width:0;
+}
+
+.cart-summary-copy strong{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.cart-summary-total{
+  flex:0 0 auto;
+  min-width:0;
+}
+
+.cart-view-btn{
+  max-width:138px;
+  min-width:104px;
+  height:40px;
+  border:0;
+  border-radius:9px;
+  background:#fff;
+  color:#9d2f6a;
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:8px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.cart-view-btn span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.cart-view-btn strong{
+  font-size:9px;
+}
+
+/* Bottom nav always fixed inside main app */
+.bottom-nav{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  z-index:80 !important;
+}
+
+/* ---------- Cart sheet ---------- */
+
+.staff-cart-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:9990;
+  background:rgba(24,18,27,.32);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .18s ease,visibility .18s ease;
+}
+
+.staff-cart-backdrop.show{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.staff-cart-sheet{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:9991;
+  max-height:72dvh;
+  background:#fff;
+  border-radius:18px 18px 0 0;
+  transform:translateY(105%);
+  transition:transform .24s cubic-bezier(.2,.8,.2,1);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.staff-cart-sheet.show{
+  transform:translateY(0);
+}
+
+.staff-cart-handle{
+  width:36px;
+  height:4px;
+  margin:9px auto 3px;
+  border-radius:999px;
+  background:#ddd7dd;
+}
+
+.staff-cart-head{
+  min-height:48px;
+  padding:0 13px;
+  border-bottom:1px solid #eee9ef;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.staff-cart-head strong{
+  color:#34283a;
+  font-size:11px;
+}
+
+.staff-cart-head button{
+  width:31px;
+  height:31px;
+  border:0;
+  border-radius:8px;
+  background:#f5f2f5;
+  color:#746578;
+}
+
+.staff-cart-list{
+  padding:7px 13px;
+  overflow:auto;
+  flex:1;
+}
+
+.staff-cart-row{
+  min-height:51px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:9px;
+  border-bottom:1px solid #f0ecf0;
+}
+
+.staff-cart-item strong{
+  display:block;
+  color:#3a2d3f;
+  font-size:8.5px;
+}
+
+.staff-cart-item span{
+  display:block;
+  margin-top:2px;
+  color:#8b96a0;
+  font-size:7px;
+}
+
+.staff-cart-qty{
+  color:#b63777;
+  font-size:8px;
+  font-weight:800;
+}
+
+.staff-cart-amount{
+  min-width:58px;
+  text-align:right;
+  color:#352a3a;
+  font-size:8.5px;
+  font-weight:800;
+}
+
+.staff-cart-footer{
+  padding:11px 13px calc(11px + env(safe-area-inset-bottom));
+  border-top:1px solid #eee9ef;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.staff-cart-footer span{
+  color:#7f8a94;
+  font-size:7px;
+}
+
+.staff-cart-footer strong{
+  display:block;
+  margin-top:2px;
+  color:#302536;
+  font-size:13px;
+}
+
+@media(min-width:700px){
+  .menu-category-grid{
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  }
+}
+
+@media(min-width:1050px){
+  .menu-category-grid{
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+  }
+}
+
+@media(max-width:350px){
+  .cart-view-btn{
+    min-width:92px;
+    padding:0 7px;
+  }
+
+  .cart-summary-copy small{
+    font-size:6px;
+  }
+
+  .cart-summary-copy strong{
+    font-size:9px;
+  }
+}
+
+
+/* =========================================================
+   CATEGORY HEADINGS + AUTO RESPONSIVE CARD FIX
+========================================================= */
+
+/* Category/side headings: slightly bigger, different font + color */
+.menu-category-head{
+  margin-bottom:10px !important;
+  padding:0 3px !important;
+}
+
+.menu-category-title{
+  font-family:"Plus Jakarta Sans","Inter",sans-serif !important;
+  font-size:15px !important;
+  line-height:1.25 !important;
+  font-weight:800 !important;
+  letter-spacing:-.35px !important;
+  color:#6f365f !important;
+}
+
+.menu-category-count{
+  font-family:"Plus Jakarta Sans","Inter",sans-serif !important;
+  font-size:8px !important;
+  font-weight:700 !important;
+  color:#a17b96 !important;
+}
+
+/*
+  Auto-fit is important:
+  fixed 5/6-column rules were making cards too narrow around
+  tablet / ~980px widths, so Add control was getting cut.
+*/
+.menu-category-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(155px,1fr)) !important;
+  gap:11px !important;
+  width:100% !important;
+}
+
+/* Cards may expand with available width */
+.menu-item-card{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:none !important;
+}
+
+.menu-item-body{
+  min-width:0 !important;
+}
+
+.menu-item-bottom{
+  width:100% !important;
+  min-width:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+}
+
+.menu-item-price{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+}
+
+.menu-item-bottom > [data-control-item]{
+  flex:0 0 82px !important;
+  width:82px !important;
+  min-width:82px !important;
+  max-width:82px !important;
+}
+
+/* Mobile: exactly two clean cards where practical */
+@media(max-width:520px){
+  .menu-category-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+
+  .menu-category-title{
+    font-size:14px !important;
+  }
+}
+
+/*
+  Tablet / desktop, including 980px:
+  cards choose their own count based on actual available width.
+  No fixed 5-column squeeze.
+*/
+@media(min-width:521px){
+  .menu-category-grid{
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr)) !important;
+  }
+}
+
+@media(min-width:900px){
+  .menu-category-grid{
+    grid-template-columns:repeat(auto-fit,minmax(185px,1fr)) !important;
+    gap:12px !important;
+  }
+}
+
+/* Very narrow devices: give control enough room without clipping */
+@media(max-width:340px){
+  .menu-category-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* Bigger category headings */
+.menu-category-title{
+  font-size:19px !important;
+  line-height:1.25 !important;
+  font-weight:800 !important;
+  letter-spacing:-.45px !important;
+}
+
+.menu-category-count{
+  font-size:9px !important;
+}
+
+.menu-category-head{
+  margin-bottom:12px !important;
+}
+
+@media(max-width:520px){
+  .menu-category-title{
+    font-size:17px !important;
+  }
+}
+
+
+/* =========================================================
+   SEPARATE CART PER TABLE
+========================================================= */
+
+.cart-summary-bar{
+  min-height:54px !important;
+  padding:8px 9px 8px 12px !important;
+  overflow:visible !important;
+}
+
+.cart-summary-copy{
+  min-width:0;
+  flex:1 1 auto;
+}
+
+.cart-summary-copy small{
+  display:block;
+  color:#decddd !important;
+  font-size:7px !important;
+  font-weight:700;
+}
+
+.cart-summary-copy strong{
+  display:block;
+  margin-top:2px;
+  color:#fff;
+  font-size:11px !important;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.cart-send-btn{
+  flex:0 0 auto;
+  min-width:86px;
+  height:38px;
+  border:0;
+  border-radius:9px;
+  background:#fff;
+  color:#a52f6d;
+  padding:0 14px;
+  font-size:9px;
+  font-weight:800;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.cart-send-btn:active{
+  opacity:.88;
+}
+
+.cart-send-btn:disabled{
+  opacity:.5;
+}
+
+/* no old cart sheet needed */
+.staff-cart-backdrop,
+.staff-cart-sheet{
+  display:none !important;
+}
+
+
+/* =========================================================
+   UPDATED CART BAR COLOR + TOTAL
+========================================================= */
+
+.cart-summary-bar{
+  background:#17324d !important;
+  color:#fff !important;
+  box-shadow:0 10px 28px rgba(23,50,77,.20) !important;
+  border:1px solid rgba(255,255,255,.05) !important;
+  padding:8px 9px 8px 12px !important;
+  gap:10px !important;
+}
+
+.cart-summary-copy{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+}
+
+.cart-summary-copy small{
+  color:#b9cad8 !important;
+  font-size:7px !important;
+}
+
+.cart-summary-copy strong{
+  color:#fff !important;
+  font-size:11px !important;
+}
+
+.cart-summary-amount{
+  flex:0 0 auto;
+  min-width:62px;
+  text-align:right;
+}
+
+.cart-summary-amount small{
+  display:block;
+  color:#b9cad8;
+  font-size:7px;
+}
+
+.cart-summary-amount strong{
+  display:block;
+  margin-top:2px;
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.cart-send-btn{
+  min-width:82px !important;
+  height:38px !important;
+  border:0 !important;
+  border-radius:9px !important;
+  background:#fff !important;
+  color:#17324d !important;
+  padding:0 14px !important;
+  font-size:9px !important;
+  font-weight:800 !important;
+}
+
+.cart-send-btn:active{
+  opacity:.9 !important;
+}
+
+@media(max-width:360px){
+  .cart-summary-bar{
+    gap:7px !important;
+    padding-left:9px !important;
+  }
+
+  .cart-summary-amount{
+    min-width:54px;
+  }
+
+  .cart-send-btn{
+    min-width:70px !important;
+    padding:0 10px !important;
+  }
+
+  .cart-summary-copy strong{
+    font-size:10px !important;
+  }
+
+  .cart-summary-amount strong{
+    font-size:10px !important;
+  }
+}
+
+
+/* =========================================================
+   REAL TABLE ORDERS
+========================================================= */
+
+.orders-v2-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:13px;
+}
+
+.orders-v2-title{
+  margin:0;
+  color:#26384b;
+  font-family:"Plus Jakarta Sans","Inter",sans-serif;
+  font-size:19px;
+  font-weight:800;
+  letter-spacing:-.45px;
+}
+
+.orders-v2-sub{
+  margin-top:4px;
+  color:#8c98a4;
+  font-size:8px;
+}
+
+.orders-refresh-btn{
+  height:33px;
+  border:1px solid #dfe5ea;
+  border-radius:8px;
+  background:#fff;
+  color:#486b84;
+  padding:0 10px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:7px;
+  font-weight:800;
+}
+
+.orders-refresh-btn.loading i{
+  animation:spin .7s linear infinite;
+}
+
+.orders-v2-list{
+  display:grid;
+  gap:10px;
+}
+
+.order-card{
+  background:#fff;
+  border:1px solid #e4e9ed;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.order-card-head{
+  min-height:47px;
+  padding:0 11px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom:1px solid #edf0f3;
+}
+
+.order-card-table strong{
+  display:block;
+  color:#2e4053;
+  font-size:11px;
+}
+
+.order-card-table span{
+  display:block;
+  margin-top:2px;
+  color:#8e9aa6;
+  font-size:7px;
+}
+
+.order-badge-new{
+  min-height:21px;
+  border-radius:999px;
+  padding:0 8px;
+  display:inline-flex;
+  align-items:center;
+  background:#fff0f5;
+  color:#c03b76;
+  font-size:6.5px;
+  font-weight:800;
+}
+
+.order-items{
+  padding:7px 11px;
+}
+
+.order-item-row{
+  min-height:39px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:8px;
+  border-bottom:1px solid #f0f2f4;
+}
+
+.order-item-row:last-child{
+  border-bottom:0;
+}
+
+.order-item-copy strong{
+  display:block;
+  color:#405163;
+  font-size:8.5px;
+}
+
+.order-item-copy span{
+  display:block;
+  margin-top:2px;
+  color:#929da7;
+  font-size:7px;
+}
+
+.order-item-qty{
+  color:#637485;
+  font-size:7.5px;
+  font-weight:800;
+}
+
+.order-item-amount{
+  min-width:55px;
+  text-align:right;
+  color:#314356;
+  font-size:8.5px;
+  font-weight:800;
+}
+
+.order-card-foot{
+  min-height:47px;
+  padding:7px 10px;
+  border-top:1px solid #edf0f3;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:9px;
+}
+
+.order-total small{
+  display:block;
+  color:#8c98a4;
+  font-size:6.5px;
+}
+
+.order-total strong{
+  display:block;
+  margin-top:2px;
+  color:#263a4e;
+  font-size:11px;
+}
+
+.order-add-btn{
+  height:31px;
+  border:1px solid #d94f93;
+  border-radius:8px;
+  background:#fff;
+  color:#c93680;
+  padding:0 11px;
+  font-size:7.5px;
+  font-weight:800;
+}
+
+.orders-empty{
+  min-height:220px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:#8f9aa5;
+  text-align:center;
+}
+
+.orders-empty i{
+  margin-bottom:9px;
+  color:#9ca8b2;
+  font-size:21px;
+}
+
+.orders-empty strong{
+  color:#566777;
+  font-size:10px;
+}
+
+.orders-empty span{
+  margin-top:4px;
+  font-size:8px;
+}
+
+/* =========================================================
+   ADD ITEMS TO EXISTING ORDER SHEET
+========================================================= */
+
+.order-add-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:9990;
+  background:rgba(27,20,29,.32);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .18s ease,visibility .18s ease;
+}
+
+.order-add-backdrop.show{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.order-add-sheet{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:9991;
+  max-height:84dvh;
+  background:#fff;
+  border-radius:18px 18px 0 0;
+  transform:translateY(105%);
+  transition:transform .24s cubic-bezier(.2,.8,.2,1);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.order-add-sheet.show{
+  transform:translateY(0);
+}
+
+.order-add-handle{
+  width:36px;
+  height:4px;
+  margin:9px auto 3px;
+  border-radius:999px;
+  background:#ddd7dd;
+}
+
+.order-add-head{
+  min-height:48px;
+  padding:0 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom:1px solid #eee9ef;
+}
+
+.order-add-head strong{
+  display:block;
+  color:#34283a;
+  font-size:11px;
+}
+
+.order-add-head span{
+  display:block;
+  margin-top:2px;
+  color:#8f99a3;
+  font-size:7px;
+}
+
+.order-add-close{
+  width:31px;
+  height:31px;
+  border:0;
+  border-radius:8px;
+  background:#f5f2f5;
+  color:#746578;
+}
+
+.order-add-search-wrap{
+  position:relative;
+  padding:9px 10px 7px;
+}
+
+.order-add-search-wrap i{
+  position:absolute;
+  left:22px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#929da7;
+  font-size:8px;
+}
+
+.order-add-search-wrap input{
+  width:100%;
+  height:35px;
+  border:1px solid #e0dbe1;
+  border-radius:8px;
+  outline:none;
+  background:#faf9fa;
+  padding:0 10px 0 31px;
+  color:#413546;
+  font-size:8px;
+}
+
+.order-add-categories{
+  padding:0 10px 8px;
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+.order-add-categories::-webkit-scrollbar{
+  display:none;
+}
+
+.order-add-cat{
+  flex:0 0 auto;
+  height:27px;
+  border:1px solid #e3dde3;
+  border-radius:999px;
+  background:#fff;
+  color:#746777;
+  padding:0 9px;
+  font-size:6.8px;
+  font-weight:800;
+}
+
+.order-add-cat.active{
+  border-color:#c64282;
+  background:#c64282;
+  color:#fff;
+}
+
+.order-add-body{
+  flex:1;
+  overflow:auto;
+  padding:2px 10px 10px;
+}
+
+.order-add-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+
+.order-add-card{
+  border:1px solid #e8e2e8;
+  border-radius:10px;
+  background:#fff;
+  overflow:hidden;
+}
+
+.order-add-card-img{
+  width:100%;
+  aspect-ratio:1.65/1;
+  display:block;
+  object-fit:cover;
+  background:#f4f1f4;
+}
+
+.order-add-card-img-empty{
+  width:100%;
+  aspect-ratio:1.65/1;
+  display:grid;
+  place-items:center;
+  background:#f4f1f4;
+  color:#a6a0a6;
+  font-size:15px;
+}
+
+.order-add-card-body{
+  padding:7px;
+}
+
+.order-add-card-name{
+  min-height:25px;
+  color:#3a303e;
+  font-size:8px;
+  line-height:1.4;
+  font-weight:750;
+}
+
+.order-add-card-bottom{
+  margin-top:5px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+}
+
+.order-add-card-price{
+  color:#302536;
+  font-size:8.5px;
+  font-weight:800;
+}
+
+.order-sheet-add{
+  min-width:50px;
+  height:26px;
+  border:1px solid #d94f93;
+  border-radius:7px;
+  background:#fff;
+  color:#c93680;
+  font-size:7px;
+  font-weight:800;
+}
+
+.order-sheet-qty{
+  height:26px;
+  border:1px solid #d94f93;
+  border-radius:7px;
+  overflow:hidden;
+  display:inline-flex;
+  align-items:center;
+}
+
+.order-sheet-qty button{
+  width:25px;
+  height:25px;
+  border:0;
+  background:#fff;
+  color:#c93680;
+  font-size:8px;
+}
+
+.order-sheet-qty span{
+  min-width:23px;
+  text-align:center;
+  color:#a62c69;
+  font-size:7.5px;
+  font-weight:800;
+}
+
+.order-add-footer{
+  min-height:60px;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  border-top:1px solid #eee9ef;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.order-add-footer small{
+  display:block;
+  color:#8e98a2;
+  font-size:6.5px;
+}
+
+.order-add-footer strong{
+  display:block;
+  margin-top:2px;
+  color:#34283a;
+  font-size:10px;
+}
+
+.order-add-save{
+  min-width:88px;
+  height:39px;
+  border:0;
+  border-radius:9px;
+  background:#17324d;
+  color:#fff;
+  font-size:8px;
+  font-weight:800;
+}
+
+.order-add-save:disabled{
+  opacity:.45;
+}
+
+.order-add-save.loading{
+  pointer-events:none;
+}
+
+@media(min-width:700px){
+  .orders-v2-list{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .order-add-grid{
+    grid-template-columns:repeat(5,minmax(0,1fr));
+  }
+}
+
+
+/* =========================================================
+   FIXED ADD ITEMS SHEET UI
+   - no cut categories
+   - sticky top controls
+   - independent body scroll
+   - safe footer
+========================================================= */
+
+.order-add-sheet{
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  width:100% !important;
+  max-width:none !important;
+  height:min(88dvh,760px) !important;
+  max-height:88dvh !important;
+  border-radius:18px 18px 0 0 !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+  background:#fff !important;
+}
+
+.order-add-handle{
+  flex:0 0 auto !important;
+  margin:8px auto 3px !important;
+}
+
+.order-add-head{
+  flex:0 0 auto !important;
+  min-height:50px !important;
+  padding:0 14px !important;
+  background:#fff !important;
+  position:relative !important;
+  z-index:4 !important;
+}
+
+.order-add-head strong{
+  font-family:"Plus Jakarta Sans","Inter",sans-serif !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  color:#2e2532 !important;
+}
+
+.order-add-head span{
+  font-size:7.5px !important;
+  color:#8b939b !important;
+}
+
+.order-add-search-wrap{
+  flex:0 0 auto !important;
+  padding:8px 12px 7px !important;
+  background:#fff !important;
+  position:relative !important;
+  z-index:4 !important;
+}
+
+.order-add-search-wrap i{
+  left:24px !important;
+}
+
+.order-add-search-wrap input{
+  height:38px !important;
+  border-radius:9px !important;
+  background:#faf9fb !important;
+  font-size:8.5px !important;
+}
+
+.order-add-categories{
+  flex:0 0 auto !important;
+  width:100% !important;
+  min-height:38px !important;
+  padding:3px 12px 8px !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  white-space:nowrap !important;
+  scrollbar-width:none !important;
+  -webkit-overflow-scrolling:touch !important;
+  overscroll-behavior-x:contain !important;
+  background:#fff !important;
+  position:relative !important;
+  z-index:4 !important;
+}
+
+.order-add-categories::-webkit-scrollbar{
+  display:none !important;
+}
+
+.order-add-cat{
+  flex:0 0 auto !important;
+  min-width:max-content !important;
+  height:29px !important;
+  padding:0 11px !important;
+  border-radius:999px !important;
+  font-size:7.2px !important;
+  white-space:nowrap !important;
+}
+
+.order-add-body{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  overscroll-behavior:contain !important;
+  padding:4px 10px 12px !important;
+  background:#fbfbfc !important;
+}
+
+.order-add-grid{
+  width:100% !important;
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:9px !important;
+}
+
+.order-add-card{
+  min-width:0 !important;
+  border-radius:10px !important;
+  background:#fff !important;
+}
+
+.order-add-card-img,
+.order-add-card-img-empty{
+  aspect-ratio:1.8/1 !important;
+}
+
+.order-add-card-body{
+  padding:8px !important;
+}
+
+.order-add-card-name{
+  min-height:28px !important;
+  font-size:8.4px !important;
+  line-height:1.4 !important;
+}
+
+.order-add-card-bottom{
+  margin-top:6px !important;
+  min-height:28px !important;
+}
+
+.order-add-card-price{
+  font-size:9px !important;
+}
+
+.order-sheet-add{
+  width:54px !important;
+  min-width:54px !important;
+  height:27px !important;
+}
+
+.order-sheet-qty{
+  height:27px !important;
+}
+
+.order-sheet-qty button{
+  width:26px !important;
+  height:26px !important;
+}
+
+.order-add-footer{
+  flex:0 0 auto !important;
+  min-height:66px !important;
+  padding:
+    9px
+    12px
+    calc(9px + env(safe-area-inset-bottom))
+    !important;
+  background:#fff !important;
+  position:relative !important;
+  z-index:5 !important;
+  box-shadow:0 -5px 16px rgba(35,25,38,.05) !important;
+}
+
+.order-add-footer small{
+  font-size:7px !important;
+}
+
+.order-add-footer strong{
+  font-size:11px !important;
+}
+
+.order-add-save{
+  min-width:96px !important;
+  height:41px !important;
+  border-radius:9px !important;
+}
+
+/* Larger screens: more cards, but never squeeze/cut */
+@media(min-width:560px){
+  .order-add-grid{
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr)) !important;
+  }
+}
+
+@media(min-width:900px){
+  .order-add-sheet{
+    height:min(84dvh,720px) !important;
+  }
+
+  .order-add-grid{
+    grid-template-columns:repeat(auto-fit,minmax(165px,1fr)) !important;
+  }
+}
+
+/* Small phones */
+@media(max-width:360px){
+  .order-add-sheet{
+    height:91dvh !important;
+    max-height:91dvh !important;
+  }
+
+  .order-add-head{
+    padding:0 10px !important;
+  }
+
+  .order-add-search-wrap{
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  .order-add-categories{
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  .order-add-body{
+    padding-left:8px !important;
+    padding-right:8px !important;
+  }
+
+  .order-add-grid{
+    gap:7px !important;
+  }
+}
+
+
+.profile-delivered-wrap{margin-top:14px;border:1px solid #e5eaee;border-radius:14px;background:#fff;overflow:hidden}
+.profile-delivered-head{min-height:48px;padding:0 12px;border-bottom:1px solid #edf0f3;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.profile-delivered-head strong{display:block;color:#324457;font-family:"Plus Jakarta Sans","Inter",sans-serif;font-size:11px;font-weight:800}
+.profile-delivered-head span{display:block;margin-top:2px;color:#8e99a4;font-size:7px}
+.profile-delivered-count{min-width:26px;height:24px;border-radius:999px;background:#edf5f0;color:#34745b!important;display:grid!important;place-items:center;padding:0 8px;font-size:8px!important;font-weight:800}
+.profile-delivered-list{max-height:320px;overflow:auto}
+.profile-delivered-row{min-height:58px;padding:9px 11px;border-bottom:1px solid #f0f2f4;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.profile-delivered-row:last-child{border-bottom:0}
+.profile-delivered-main{min-width:0}
+.profile-delivered-main strong{display:block;color:#405163;font-size:9px}
+.profile-delivered-main span{display:block;margin-top:3px;color:#929da7;font-size:7px}
+.profile-delivered-total{flex:0 0 auto;text-align:right}
+.profile-delivered-total strong{display:block;color:#33465a;font-size:9px}
+.profile-delivered-total span{display:block;margin-top:3px;color:#34745b;font-size:7px;font-weight:700}
+.profile-delivered-empty{min-height:80px;display:flex;align-items:center;justify-content:center;color:#98a3ad;font-size:8px;text-align:center;padding:14px}
+
+
+/* =========================================================
+   ADMIN-ONLY PRINT BILL
+========================================================= */
+
+.order-card-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.order-print-btn{
+  height:31px;
+  border:0;
+  border-radius:8px;
+  background:#17324d;
+  color:#fff;
+  padding:0 11px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:7.5px;
+  font-weight:800;
+}
+
+.order-print-btn:active{
+  opacity:.9;
+}
+
+.order-print-btn:disabled{
+  opacity:.55;
+  pointer-events:none;
+}
+
+@media(max-width:380px){
+  .order-card-foot{
+    align-items:flex-end;
+  }
+
+  .order-card-actions{
+    gap:5px;
+  }
+
+  .order-add-btn,
+  .order-print-btn{
+    padding:0 9px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<section id="loginScreen" class="screen">
+
+  <div class="top-design">
+    <div class="top-shape"></div>
+    <div class="top-shape-light"></div>
+    <div class="top-dot"></div>
+    <div class="top-dot-small"></div>
+  </div>
+
+  <main class="login">
+
+    <header class="login-head">
+      <div class="login-small">Staff Access</div>
+      <h1 class="login-title">Login</h1>
+    </header>
+
+    <form id="loginForm">
+
+      <div class="field">
+        <label for="mobile">Mobile number</label>
+
+        <div class="input-wrap">
+          <i class="fa-solid fa-mobile-screen input-icon"></i>
+
+          <input
+            id="mobile"
+            type="tel"
+            inputmode="numeric"
+            maxlength="10"
+            placeholder="Enter mobile number"
+            autocomplete="tel"
+          >
+        </div>
+      </div>
+
+
+      <div class="field">
+        <label for="password">Password</label>
+
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock input-icon"></i>
+
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter password"
+            autocomplete="current-password"
+          >
+
+          <button
+            type="button"
+            class="eye-btn"
+            id="passwordEye"
+          >
+            <i class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+
+      <div class="options">
+
+        <label class="remember">
+          <input type="checkbox" checked>
+          Remember me
+        </label>
+
+        <button
+          type="button"
+          class="forgot"
+          id="forgotBtn"
+        >
+          Forgot password?
+        </button>
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="login-btn"
+        id="loginBtn"
+      >
+        <span class="btn-text">Login</span>
+
+        <i
+          class="fa-solid fa-circle-notch spinner"
+        ></i>
+
+        <span class="success-check">
+          <i class="fa-solid fa-check"></i>
+        </span>
+      </button>
+
+    </form>
+
+  </main>
+
+
+  <footer class="company-footer">
+    <div class="company-line"></div>
+
+    <div class="company-name">
+      Cezonal Solutions Pvt Ltd
+    </div>
+  </footer>
+
+</section>
+
+
+
+<!-- MAIN -->
+
+<section
+  id="mainScreen"
+  class="screen hidden"
+>
+
+  <!-- REAL BUSINESS HEADER -->
+
+  <header class="main-header">
+
+    <div class="brand-wrap">
+
+      <img
+        id="restaurantLogo"
+        class="restaurant-logo"
+        alt="Business logo"
+      >
+
+      <div
+        id="restaurantLogoFallback"
+        class="restaurant-logo-fallback"
+      >
+        <i class="fa-solid fa-utensils"></i>
+      </div>
+
+      <div
+        id="mainBrandName"
+        class="brand-name"
+      >
+        Loading...
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <div class="main-scroll">
+
+
+    <!-- HOME -->
+
+    <section
+      id="homePage"
+      class="tab-page active"
+    >
+
+      <div
+        class="home-table-select"
+        id="homeTableSelect"
+      >
+
+        <div class="home-table-select-top">
+
+          <div class="home-table-select-copy">
+            <strong>Select Table</strong>
+            <span>Select a table before adding items</span>
+          </div>
+
+          <span
+            class="home-table-count"
+            id="homeTableCount"
+          >
+            0 Tables
+          </span>
+
+        </div>
+
+        <div class="home-table-select-wrap">
+
+          <select
+            id="tableNumberSelect"
+            class="home-table-select-control"
+          >
+            <option value="">Select Table</option>
+          </select>
+
+        </div>
+
+        <div
+          class="home-table-note"
+          id="homeTableNote"
+        >
+          Select a table first.
+        </div>
+
+      </div>
+
+
+      <div
+        id="itemsGrid"
+        class="home-items-area"
+      >
+
+        <div class="data-loading">
+          <i class="fa-solid fa-circle-notch"></i>
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ORDERS -->
+
+    <section
+      id="ordersPage"
+      class="tab-page"
+    >
+
+      <div class="orders-v2-head">
+
+        <div>
+          <h2 class="orders-v2-title">Orders</h2>
+          <p class="orders-v2-sub">
+            Active table orders for this business.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="orders-refresh-btn"
+          id="ordersRefreshBtn"
+        >
+          <i class="fa-solid fa-rotate"></i>
+          Refresh
+        </button>
+
+      </div>
+
+      <div
+        class="orders-v2-list"
+        id="ordersList"
+      >
+        <div class="orders-empty">
+          <i class="fa-solid fa-receipt"></i>
+          <strong>Loading orders</strong>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- PROFILE -->
+
+    <section
+      id="profilePage"
+      class="tab-page"
+    >
+
+      <div class="section-head">
+        <h2 class="section-title">Profile</h2>
+      </div>
+
+
+      <div class="profile-card">
+
+        <div class="profile-top">
+
+          <div class="profile-avatar">
+            <i class="fa-solid fa-user"></i>
+          </div>
+
+          <div class="profile-copy">
+
+            <div
+              class="profile-name"
+              id="profileName"
+            >
+              Staff
+            </div>
+
+            <div
+              class="profile-role"
+              id="profileRole"
+            >
+              waiter
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="profile-divider"></div>
+
+
+        <div class="profile-row">
+
+          <small>Mobile number</small>
+
+          <strong id="profileMobile">
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="profile-row">
+
+          <small>Business</small>
+
+          <strong id="profileBusiness">
+            —
+          </strong>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="profile-logout"
+          id="logoutBtn"
+        >
+          Logout
+        </button>
+
+      </div>
+
+    
+      <div class="profile-delivered-wrap">
+        <div class="profile-delivered-head">
+          <div>
+            <strong>Delivered</strong>
+            <span>Completed table orders</span>
+          </div>
+          <span class="profile-delivered-count" id="profileDeliveredCount">0</span>
+        </div>
+        <div class="profile-delivered-list" id="profileDeliveredList">
+          <div class="profile-delivered-empty">No delivered orders yet.</div>
+        </div>
+      </div>
+</section>
+
+
+  </div>
+
+
+  <!-- TABLE CART SUMMARY -->
+  <div class="cart-summary-bar" id="cartSummaryBar">
+
+    <div class="cart-summary-copy">
+      <small id="cartSummaryTable">Select Table</small>
+      <strong id="cartSummaryCount">0 items</strong>
+    </div>
+
+    <div class="cart-summary-amount">
+      <small>Total</small>
+      <strong id="cartSummaryAmount">₹0.00</strong>
+    </div>
+
+    <button
+      type="button"
+      class="cart-send-btn"
+      id="cartSendBtn"
+    >
+      Send
+    </button>
+
+  </div>
+
+
+  <!-- BOTTOM -->
+
+  <nav class="bottom-nav">
+
+    <button
+      type="button"
+      class="nav-btn active"
+      data-tab="home"
+    >
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </button>
+
+
+    <button
+      type="button"
+      class="nav-btn"
+      data-tab="orders"
+    >
+      <i class="fa-solid fa-receipt"></i>
+      <span>Orders</span>
+    </button>
+
+
+    <button
+      type="button"
+      class="nav-btn"
+      data-tab="profile"
+    >
+      <i class="fa-solid fa-user"></i>
+      <span>Profile</span>
+    </button>
+
+  </nav>
+
+</section>
+
+
+
+
+<div
+  class="order-add-backdrop"
+  id="orderAddBackdrop"
+></div>
+
+<section
+  class="order-add-sheet"
+  id="orderAddSheet"
+  aria-hidden="true"
+>
+
+  <div class="order-add-handle"></div>
+
+  <div class="order-add-head">
+
+    <div>
+      <strong id="orderAddTitle">Add Items</strong>
+      <span id="orderAddSubtitle">Table</span>
+    </div>
+
+    <button
+      type="button"
+      class="order-add-close"
+      id="orderAddClose"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+  </div>
+
+  <div class="order-add-search-wrap">
+    <i class="fa-solid fa-magnifying-glass"></i>
+
+    <input
+      id="orderAddSearch"
+      placeholder="Search items"
+      autocomplete="off"
+    >
+  </div>
+
+  <div
+    class="order-add-categories"
+    id="orderAddCategories"
+  ></div>
+
+  <div class="order-add-body">
+
+    <div
+      class="order-add-grid"
+      id="orderAddGrid"
+    ></div>
+
+  </div>
+
+  <div class="order-add-footer">
+
+    <div>
+      <small>New items</small>
+      <strong id="orderAddSummary">0 items · ₹0.00</strong>
+    </div>
+
+    <button
+      type="button"
+      class="order-add-save"
+      id="orderAddSave"
+      disabled
+    >
+      Save
+    </button>
+
+  </div>
+
+</section>
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://mlujsndvyrfxhvsxjfkw.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_C6Nrsn1T1CLkXM-7OcqCjQ_Ug8H8FDF";
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+const SESSION_KEY =
+  "cezonal_billing_staff_session";
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const loginScreen =
+  document.getElementById(
+    "loginScreen"
+  );
+
+const mainScreen =
+  document.getElementById(
+    "mainScreen"
+  );
+
+const loginForm =
+  document.getElementById(
+    "loginForm"
+  );
+
+const mobileInput =
+  document.getElementById(
+    "mobile"
+  );
+
+const passwordInput =
+  document.getElementById(
+    "password"
+  );
+
+const passwordEye =
+  document.getElementById(
+    "passwordEye"
+  );
+
+const loginBtn =
+  document.getElementById(
+    "loginBtn"
+  );
+
+const forgotBtn =
+  document.getElementById(
+    "forgotBtn"
+  );
+
+const logoutBtn =
+  document.getElementById(
+    "logoutBtn"
+  );
+
+const toast =
+  document.getElementById(
+    "toast"
+  );
+
+const itemsGrid =
+  document.getElementById(
+    "itemsGrid"
+  );
+
+
+const cartSummaryBar =
+  document.getElementById(
+    "cartSummaryBar"
+  );
+
+const cartSummaryCount =
+  document.getElementById(
+    "cartSummaryCount"
+  );
+
+const cartSummaryTable =
+  document.getElementById(
+    "cartSummaryTable"
+  );
+
+const cartSummaryAmount =
+  document.getElementById(
+    "cartSummaryAmount"
+  );
+
+const cartSendBtn =
+  document.getElementById(
+    "cartSendBtn"
+  );
+
+
+const ordersList =
+  document.getElementById(
+    "ordersList"
+  );
+
+const ordersRefreshBtn =
+  document.getElementById(
+    "ordersRefreshBtn"
+  );
+
+const profileDeliveredList =
+  document.getElementById(
+    "profileDeliveredList"
+  );
+
+const profileDeliveredCount =
+  document.getElementById(
+    "profileDeliveredCount"
+  );
+
+const orderAddBackdrop =
+  document.getElementById(
+    "orderAddBackdrop"
+  );
+
+const orderAddSheet =
+  document.getElementById(
+    "orderAddSheet"
+  );
+
+const orderAddClose =
+  document.getElementById(
+    "orderAddClose"
+  );
+
+const orderAddTitle =
+  document.getElementById(
+    "orderAddTitle"
+  );
+
+const orderAddSubtitle =
+  document.getElementById(
+    "orderAddSubtitle"
+  );
+
+const orderAddSearch =
+  document.getElementById(
+    "orderAddSearch"
+  );
+
+const orderAddCategories =
+  document.getElementById(
+    "orderAddCategories"
+  );
+
+const orderAddGrid =
+  document.getElementById(
+    "orderAddGrid"
+  );
+
+const orderAddSummary =
+  document.getElementById(
+    "orderAddSummary"
+  );
+
+const orderAddSave =
+  document.getElementById(
+    "orderAddSave"
+  );
+
+
+const tableNumberSelect =
+  document.getElementById(
+    "tableNumberSelect"
+  );
+
+const homeTableCount =
+  document.getElementById(
+    "homeTableCount"
+  );
+
+const homeTableNote =
+  document.getElementById(
+    "homeTableNote"
+  );
+
+
+let currentMenuItems = [];
+
+/*
+  Live menu sync state.
+  Realtime is primary. A tiny silent fallback check runs only while
+  the app is visible so staff never needs to refresh manually.
+*/
+let lastMenuSignature = "";
+let menuLiveCheckTimer = null;
+let menuLiveCheckBusy = false;
+let menuRealtimeStatus = "idle";
+
+/*
+  Each table owns a completely separate cart.
+  Key = table number, Value = Map(itemId -> qty)
+*/
+const tableCarts = new Map();
+
+let selectedItemQty = new Map();
+
+const itemClickLocks = new Set();
+
+let currentTotalSeating = 0;
+let selectedTableNumber = "";
+let lastBusinessSetup = null;
+let businessRealtimeChannel = null;
+
+let currentOrders = [];
+let deliveredOrders = [];
+let ordersRealtimeChannel = null;
+let ordersLoading = false;
+let deliveredOrdersLoading = false;
+
+let orderAddCurrentOrder = null;
+let orderAddCategory = "All";
+const orderAddQty = new Map();
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  )
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+}
+
+
+function showToast(
+  message,
+  type = ""
+){
+
+  toast.textContent =
+    message ||
+    "Something went wrong.";
+
+  toast.className =
+    "toast show";
+
+  if(type){
+    toast.classList.add(type);
+  }
+
+  clearTimeout(
+    window.toastTimer
+  );
+
+  window.toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      2800
+    );
+
+}
+
+
+function setLoginState(state){
+
+  loginBtn.classList.remove(
+    "loading",
+    "success"
+  );
+
+  loginBtn.disabled =
+    false;
+
+
+  if(state === "loading"){
+
+    loginBtn.classList.add(
+      "loading"
+    );
+
+    loginBtn.disabled =
+      true;
+
+  }
+
+
+  if(state === "success"){
+
+    loginBtn.classList.add(
+      "success"
+    );
+
+    loginBtn.disabled =
+      true;
+
+  }
+
+}
+
+
+/* =========================================================
+   SESSION
+========================================================= */
+
+function getSession(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        SESSION_KEY
+      ) || "null"
+    );
+
+  }catch{
+
+    return null;
+
+  }
+
+}
+
+
+function saveSession(session){
+
+  localStorage.setItem(
+    SESSION_KEY,
+    JSON.stringify(session)
+  );
+
+}
+
+
+function removeSession(){
+
+  localStorage.removeItem(
+    SESSION_KEY
+  );
+
+}
+
+
+/*
+  ADMIN:
+  owner_user_id = admin own ID
+
+  WAITER:
+  owner_user_id = business owner's ID
+*/
+
+function getBusinessOwnerId(session){
+
+  return String(
+    session?.owner_user_id ||
+    session?.account_id ||
+    ""
+  ).trim();
+
+}
+
+
+/* =========================================================
+   BUSINESS DATA
+========================================================= */
+
+async function loadBusinessSetup(
+  session
+){
+
+  const ownerId =
+    getBusinessOwnerId(
+      session
+    );
+
+
+  if(!ownerId){
+
+    throw new Error(
+      "Business owner ID not found."
+    );
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await db.rpc(
+      "get_business_setup_for_login",
+      {
+        p_user_id:
+          ownerId
+      }
+    );
+
+
+  if(error){
+
+    throw error;
+
+  }
+
+
+  const setup =
+    Array.isArray(data)
+      ? data[0]
+      : data;
+
+
+  if(!setup){
+
+    throw new Error(
+      "Business setup not found."
+    );
+
+  }
+
+
+  return setup;
+
+}
+
+
+
+async function loadBusinessTotalSeating(
+  session,
+  setup = null
+){
+
+  const ownerId =
+    getBusinessOwnerId(
+      session
+    );
+
+
+  let total =
+    Math.max(
+      0,
+      Math.floor(
+        Number(
+          setup?.total_seating ||
+          0
+        )
+      )
+    );
+
+
+  /*
+    Important:
+    get_business_setup_for_login may be an older RPC that does not
+    return total_seating. Read the dedicated seating RPC too.
+  */
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        "get_business_total_seating",
+        {
+          p_user_id:
+            ownerId
+        }
+      );
+
+
+    if(!error){
+
+      const result =
+        Array.isArray(data)
+          ? data[0]
+          : data;
+
+
+      if(
+        result?.success
+      ){
+
+        total =
+          Math.max(
+            0,
+            Math.floor(
+              Number(
+                result.total_seating ||
+                0
+              )
+            )
+          );
+
+      }
+
+    }else{
+
+      console.warn(
+        "Total seating RPC:",
+        error
+      );
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Total seating load:",
+      error
+    );
+
+  }
+
+
+  applyTableSelector(
+    total
+  );
+
+
+  return total;
+
+}
+
+
+function applyTableSelector(
+  total
+){
+
+  currentTotalSeating =
+    Math.max(
+      0,
+      Math.floor(
+        Number(total || 0)
+      )
+    );
+
+
+  if(homeTableCount){
+
+    homeTableCount.textContent =
+      `${currentTotalSeating} ${
+        currentTotalSeating === 1
+          ? "Table"
+          : "Tables"
+      }`;
+
+  }
+
+
+  if(!tableNumberSelect){
+    return;
+  }
+
+
+  const previous =
+    String(
+      selectedTableNumber ||
+      tableNumberSelect.value ||
+      ""
+    );
+
+
+  tableNumberSelect.innerHTML =
+    `
+      <option value="">
+        Select Table
+      </option>
+    ` +
+    Array.from(
+      {
+        length:
+          currentTotalSeating
+      },
+      (
+        _,
+        index
+      ) => {
+
+        const number =
+          index + 1;
+
+
+        return `
+          <option value="${number}">
+            Table ${number}
+          </option>
+        `;
+
+      }
+    )
+    .join("");
+
+
+  if(
+    previous &&
+    Number(previous) <=
+      currentTotalSeating
+  ){
+
+    tableNumberSelect.value =
+      previous;
+
+    activateTableCart(
+      previous
+    );
+
+  }else{
+
+    tableNumberSelect.value =
+      "";
+
+    activateTableCart(
+      ""
+    );
+
+  }
+
+}
+
+
+
+function getTableCart(
+  tableNumber
+){
+
+  const key =
+    String(
+      tableNumber ||
+      ""
+    );
+
+
+  if(!key){
+    return new Map();
+  }
+
+
+  if(
+    !tableCarts.has(key)
+  ){
+
+    tableCarts.set(
+      key,
+      new Map()
+    );
+
+  }
+
+
+  return tableCarts.get(key);
+
+}
+
+
+function activateTableCart(
+  tableNumber
+){
+
+  const key =
+    String(
+      tableNumber ||
+      ""
+    );
+
+
+  selectedTableNumber =
+    key;
+
+
+  selectedItemQty =
+    key
+      ? getTableCart(key)
+      : new Map();
+
+
+  /*
+    Re-render controls so only the selected table's quantities appear.
+    Items added to other tables stay hidden until that table is selected again.
+  */
+  if(
+    currentMenuItems.length
+  ){
+
+    renderBusinessMenu(
+      currentMenuItems
+    );
+
+  }else{
+
+    updateCartSummary();
+
+  }
+
+}
+
+
+function requireTableSelection(){
+
+  selectedTableNumber =
+    String(
+      tableNumberSelect?.value ||
+      selectedTableNumber ||
+      ""
+    );
+
+
+  if(
+    !selectedTableNumber
+  ){
+
+    homeTableNote
+      ?.classList
+      .add(
+        "show"
+      );
+
+
+    tableNumberSelect
+      ?.focus();
+
+
+    showToast(
+      currentTotalSeating > 0
+        ? "Select table first."
+        : "No tables configured in Settings.",
+      "error"
+    );
+
+
+    return false;
+
+  }
+
+
+  homeTableNote
+    ?.classList
+    .remove(
+      "show"
+    );
+
+
+  return true;
+
+}
+
+
+tableNumberSelect
+  ?.addEventListener(
+    "change",
+    () => {
+
+      const nextTable =
+        String(
+          tableNumberSelect.value ||
+          ""
+        );
+
+
+      homeTableNote
+        ?.classList
+        .toggle(
+          "show",
+          !nextTable
+        );
+
+
+      activateTableCart(
+        nextTable
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   BUSINESS HEADER
+========================================================= */
+
+function applyBusinessSetup(
+  setup,
+  session
+){
+
+  const businessName =
+    String(
+      setup?.business_name ||
+      session?.business_name ||
+      ""
+    ).trim();
+
+
+  document.getElementById(
+    "mainBrandName"
+  ).textContent =
+    businessName ||
+    "Business";
+
+
+  document.getElementById(
+    "profileBusiness"
+  ).textContent =
+    businessName ||
+    "—";
+
+
+  session.business_name =
+    businessName;
+
+
+  /*
+    Your saved business setup already uses logo_data.
+    It can be a Supabase storage URL OR data URL.
+  */
+
+  const logo =
+    String(
+      setup?.logo_data ||
+      ""
+    ).trim();
+
+
+  const image =
+    document.getElementById(
+      "restaurantLogo"
+    );
+
+
+  const fallback =
+    document.getElementById(
+      "restaurantLogoFallback"
+    );
+
+
+  if(logo){
+
+    image.src =
+      logo;
+
+
+    image.onload =
+      () => {
+
+        image.classList.add(
+          "show"
+        );
+
+        fallback.classList.add(
+          "hidden-logo"
+        );
+
+      };
+
+
+    image.onerror =
+      () => {
+
+        image.classList.remove(
+          "show"
+        );
+
+        fallback.classList.remove(
+          "hidden-logo"
+        );
+
+      };
+
+  }else{
+
+    image.classList.remove(
+      "show"
+    );
+
+    fallback.classList.remove(
+      "hidden-logo"
+    );
+
+  }
+
+
+  saveSession(
+    session
+  );
+
+}
+
+
+/* =========================================================
+   REAL MENU FROM SUPABASE
+========================================================= */
+
+async function fetchBusinessMenuRows(
+  session
+){
+
+  const ownerId =
+    getBusinessOwnerId(
+      session
+    );
+
+
+  if(!ownerId){
+
+    throw new Error(
+      "Business owner ID not found."
+    );
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await db.rpc(
+      "get_menu_items_for_user",
+      {
+        p_user_id:
+          ownerId
+      }
+    );
+
+
+  if(error){
+    throw error;
+  }
+
+
+  return Array.isArray(data)
+    ? data
+    : [];
+
+}
+
+
+function businessMenuSignature(
+  items
+){
+
+  /*
+    Only fields that affect the staff menu UI are included.
+    Stable sorting means Supabase row order changes do not trigger
+    unnecessary re-renders.
+  */
+  return JSON.stringify(
+    (
+      Array.isArray(items)
+        ? items
+        : []
+    )
+    .map(
+      item => ({
+        id:
+          String(
+            item.id ??
+            ""
+          ),
+
+        item_name:
+          String(
+            item.item_name ??
+            ""
+          ),
+
+        category:
+          String(
+            item.category ??
+            ""
+          ),
+
+        price:
+          Number(
+            item.price ??
+            0
+          ),
+
+        image_url:
+          String(
+            item.image_url ??
+            item.image ??
+            item.item_image ??
+            ""
+          ),
+
+        is_available:
+          item.is_available !==
+          false,
+
+        item_type:
+          String(
+            item.item_type ??
+            ""
+          )
+      })
+    )
+    .sort(
+      (
+        a,
+        b
+      ) =>
+        String(a.id)
+          .localeCompare(
+            String(b.id)
+          )
+    )
+  );
+
+}
+
+
+async function loadBusinessMenu(
+  session,
+  options = {}
+){
+
+  const silent =
+    options.silent ===
+    true;
+
+
+  const force =
+    options.force ===
+    true;
+
+
+  if(!silent){
+
+    itemsGrid.className =
+      "home-items-area";
+
+
+    itemsGrid.innerHTML =
+      `
+        <div class="data-loading">
+          <i class="fa-solid fa-circle-notch"></i>
+        </div>
+      `;
+
+  }
+
+
+  const items =
+    await fetchBusinessMenuRows(
+      session
+    );
+
+
+  const signature =
+    businessMenuSignature(
+      items
+    );
+
+
+  /*
+    For silent live checks, do nothing when data is unchanged.
+    This prevents card blinking and preserves scroll position.
+  */
+  if(
+    silent &&
+    !force &&
+    signature ===
+      lastMenuSignature
+  ){
+
+    return false;
+
+  }
+
+
+  lastMenuSignature =
+    signature;
+
+
+  renderBusinessMenu(
+    items
+  );
+
+
+  return true;
+
+}
+
+
+async function checkBusinessMenuLive(
+  session,
+  options = {}
+){
+
+  if(
+    menuLiveCheckBusy ||
+    document.hidden
+  ){
+    return;
+  }
+
+
+  menuLiveCheckBusy =
+    true;
+
+
+  try{
+
+    await loadBusinessMenu(
+      session,
+      {
+        silent:true,
+        force:
+          options.force ===
+          true
+      }
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Silent menu live check:",
+      error
+    );
+
+  }finally{
+
+    menuLiveCheckBusy =
+      false;
+
+  }
+
+}
+
+
+function startMenuFallbackLiveCheck(
+  session
+){
+
+  if(
+    menuLiveCheckTimer
+  ){
+
+    clearInterval(
+      menuLiveCheckTimer
+    );
+
+    menuLiveCheckTimer =
+      null;
+
+  }
+
+
+  /*
+    Realtime normally updates instantly.
+    This 3-second visible-only fallback guarantees live updates even
+    if the realtime publication/socket temporarily misses an event.
+  */
+  menuLiveCheckTimer =
+    setInterval(
+      () => {
+
+        checkBusinessMenuLive(
+          session
+        );
+
+      },
+      3000
+    );
+
+}
+
+
+/* =========================================================
+   RENDER REAL MENU
+========================================================= */
+
+function updateCartSummary(){
+
+  let totalQty = 0;
+  let totalAmount = 0;
+
+
+  currentMenuItems.forEach(
+    item => {
+
+      const qty =
+        Number(
+          selectedItemQty.get(
+            String(item.id)
+          ) ||
+          0
+        );
+
+
+      if(qty > 0){
+
+        totalQty +=
+          qty;
+
+
+        totalAmount +=
+          qty *
+          Number(
+            item.price ||
+            0
+          );
+
+      }
+
+    }
+  );
+
+
+  if(
+    selectedTableNumber &&
+    totalQty > 0
+  ){
+
+    cartSummaryBar.classList.add(
+      "show"
+    );
+
+  }else{
+
+    cartSummaryBar.classList.remove(
+      "show"
+    );
+
+  }
+
+
+  if(cartSummaryTable){
+
+    cartSummaryTable.textContent =
+      selectedTableNumber
+        ? `Table ${selectedTableNumber}`
+        : "Select Table";
+
+  }
+
+
+  cartSummaryCount.textContent =
+    `${totalQty} ${
+      totalQty === 1
+        ? "item"
+        : "items"
+    }`;
+
+
+  if(cartSummaryAmount){
+
+    cartSummaryAmount.textContent =
+      `₹${totalAmount.toFixed(2)}`;
+
+  }
+
+
+  if(cartSendBtn){
+
+    cartSendBtn.disabled =
+      !selectedTableNumber ||
+      totalQty <= 0;
+
+  }
+
+}
+
+function menuItemImageMarkup(item){
+
+  const imageUrl =
+    String(
+      item.image_url ||
+      item.image ||
+      item.item_image ||
+      ""
+    )
+    .trim();
+
+
+  if(imageUrl){
+
+    return `
+      <img
+        class="menu-item-image"
+        src="${escapeHTML(imageUrl)}"
+        alt="${escapeHTML(
+          item.item_name ||
+          ""
+        )}"
+        loading="lazy"
+        decoding="async"
+        onerror="
+          this.style.display='none';
+          this.nextElementSibling.style.display='grid';
+        "
+      >
+      <div
+        class="menu-item-image-empty"
+        style="display:none"
+      >
+        <i class="fa-solid fa-image"></i>
+      </div>
+    `;
+
+  }
+
+
+  return `
+    <div class="menu-item-image-empty">
+      <i class="fa-solid fa-image"></i>
+    </div>
+  `;
+
+}
+
+
+function itemAddControl(item){
+
+  const id =
+    String(item.id);
+
+
+  const qty =
+    Number(
+      selectedItemQty.get(id) ||
+      0
+    );
+
+
+  const available =
+    item.is_available !==
+    false;
+
+
+  if(!available){
+
+    return `
+      <span class="menu-item-out">
+        Out
+      </span>
+    `;
+
+  }
+
+
+  if(qty <= 0){
+
+    return `
+      <button
+        type="button"
+        class="menu-add-btn"
+        data-add-item="${escapeHTML(id)}"
+      >
+        Add
+      </button>
+    `;
+
+  }
+
+
+  return `
+    <div class="menu-qty-control">
+
+      <button
+        type="button"
+        class="menu-qty-btn"
+        data-dec-item="${escapeHTML(id)}"
+      >
+        <i class="fa-solid fa-minus"></i>
+      </button>
+
+      <span class="menu-qty-value">
+        ${qty}
+      </span>
+
+      <button
+        type="button"
+        class="menu-qty-btn"
+        data-inc-item="${escapeHTML(id)}"
+      >
+        <i class="fa-solid fa-plus"></i>
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+function renderBusinessMenu(
+  items
+){
+
+  currentMenuItems =
+    Array.isArray(items)
+      ? items
+      : [];
+
+
+  if(
+    !currentMenuItems.length
+  ){
+
+    itemsGrid.className =
+      "home-items-area";
+
+
+    itemsGrid.innerHTML =
+      `
+        <div class="empty-state">
+
+          <i class="fa-solid fa-utensils"></i>
+
+          <strong>
+            No menu items
+          </strong>
+
+          <span>
+            No items are saved for this business yet.
+          </span>
+
+        </div>
+      `;
+
+
+    updateCartSummary();
+
+    return;
+
+  }
+
+
+  /*
+    Keep only quantity state for items that still exist.
+  */
+  const validIds =
+    new Set(
+      currentMenuItems.map(
+        item =>
+          String(item.id)
+      )
+    );
+
+
+  for(
+    const id of
+    selectedItemQty.keys()
+  ){
+
+    if(
+      !validIds.has(id)
+    ){
+
+      selectedItemQty.delete(id);
+
+    }
+
+  }
+
+
+  const groups =
+    new Map();
+
+
+  currentMenuItems.forEach(
+    item => {
+
+      const category =
+        String(
+          item.category ||
+          "Other"
+        )
+        .trim() ||
+        "Other";
+
+
+      if(
+        !groups.has(category)
+      ){
+
+        groups.set(
+          category,
+          []
+        );
+
+      }
+
+
+      groups
+        .get(category)
+        .push(item);
+
+    }
+  );
+
+
+  const sortedCategories =
+    Array.from(
+      groups.keys()
+    )
+    .sort(
+      (
+        a,
+        b
+      ) =>
+        a.localeCompare(
+          b,
+          undefined,
+          {
+            sensitivity:"base"
+          }
+        )
+    );
+
+
+  itemsGrid.className =
+    "home-items-area items-grid";
+
+
+  itemsGrid.innerHTML =
+    sortedCategories
+      .map(
+        category => {
+
+          const rows =
+            groups.get(category) ||
+            [];
+
+
+          return `
+            <section class="menu-category-section">
+
+              <div class="menu-category-head">
+
+                <h2 class="menu-category-title">
+                  ${escapeHTML(category)}
+                </h2>
+
+                <span class="menu-category-count">
+                  ${rows.length} ${
+                    rows.length === 1
+                      ? "item"
+                      : "items"
+                  }
+                </span>
+
+              </div>
+
+
+              <div class="menu-category-grid">
+
+                ${
+                  rows
+                    .map(
+                      item => {
+
+                        const nonveg =
+                          String(
+                            item.item_type ||
+                            ""
+                          )
+                          .toLowerCase() ===
+                          "nonveg";
+
+
+                        return `
+                          <article
+                            class="menu-item-card"
+                            data-item-id="${escapeHTML(
+                              item.id
+                            )}"
+                          >
+
+                            <div class="menu-item-image-wrap">
+
+                              ${menuItemImageMarkup(item)}
+
+                              <span
+                                class="menu-item-type-badge ${
+                                  nonveg
+                                    ? "nonveg"
+                                    : ""
+                                }"
+                              ></span>
+
+                            </div>
+
+
+                            <div class="menu-item-body">
+
+                              <div class="menu-item-name">
+                                ${escapeHTML(
+                                  item.item_name ||
+                                  ""
+                                )}
+                              </div>
+
+
+                              <div class="menu-item-bottom">
+
+                                <span class="menu-item-price">
+                                  ₹${Number(
+                                    item.price ||
+                                    0
+                                  ).toFixed(2)}
+                                </span>
+
+                                <div
+                                  data-control-item="${escapeHTML(
+                                    item.id
+                                  )}"
+                                >
+                                  ${itemAddControl(item)}
+                                </div>
+
+                              </div>
+
+                            </div>
+
+                          </article>
+                        `;
+
+                      }
+                    )
+                    .join("")
+                }
+
+              </div>
+
+            </section>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  updateCartSummary();
+
+}
+
+
+function updateOneItemControl(
+  itemId
+){
+
+  const item =
+    currentMenuItems.find(
+      row =>
+        String(row.id) ===
+        String(itemId)
+    );
+
+
+  if(!item){
+    return;
+  }
+
+
+  const control =
+    Array.from(
+      document.querySelectorAll(
+        "[data-control-item]"
+      )
+    )
+    .find(
+      el =>
+        String(
+          el.getAttribute(
+            "data-control-item"
+          )
+        ) ===
+        String(itemId)
+    );
+
+
+  if(control){
+
+    control.innerHTML =
+      itemAddControl(
+        item
+      );
+
+  }
+
+
+  updateCartSummary();
+
+}
+
+
+
+function currentStaffSession(){
+  return getSession() || {};
+}
+
+
+function isAdminSession(
+  session = currentStaffSession()
+){
+
+  const role =
+    String(
+      session?.role ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  const accountType =
+    String(
+      session?.account_type ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  /*
+    Supports both possible RPC styles:
+    role = admin
+    OR
+    account_type = admin
+  */
+  return (
+    role === "admin" ||
+    role === "owner" ||
+    accountType === "admin" ||
+    accountType === "owner"
+  );
+
+}
+
+
+function buildCartOrderItems(){
+
+  const rows = [];
+
+
+  currentMenuItems.forEach(
+    item => {
+
+      const qty =
+        Number(
+          selectedItemQty.get(
+            String(item.id)
+          ) ||
+          0
+        );
+
+
+      if(qty <= 0){
+        return;
+      }
+
+
+      const price =
+        Number(
+          item.price ||
+          0
+        );
+
+
+      rows.push({
+        item_id:
+          String(item.id),
+
+        item_name:
+          String(
+            item.item_name ||
+            ""
+          ),
+
+        category:
+          String(
+            item.category ||
+            ""
+          ),
+
+        price,
+
+        quantity:
+          qty,
+
+        amount:
+          price * qty,
+
+        image_url:
+          String(
+            item.image_url ||
+            item.image ||
+            item.item_image ||
+            ""
+          )
+      });
+
+    }
+  );
+
+
+  return rows;
+
+}
+
+
+function orderMoney(value){
+  return `₹${Number(value || 0).toFixed(2)}`;
+}
+
+
+
+function renderDeliveredOrders(){
+
+  if(!profileDeliveredList){
+    return;
+  }
+
+  if(profileDeliveredCount){
+    profileDeliveredCount.textContent =
+      String(deliveredOrders.length);
+  }
+
+  if(!deliveredOrders.length){
+    profileDeliveredList.innerHTML =
+      '<div class="profile-delivered-empty">No delivered orders yet.</div>';
+    return;
+  }
+
+  profileDeliveredList.innerHTML =
+    deliveredOrders.map(
+      order => {
+
+        let when = "";
+
+        try{
+          when = new Date(
+            order.delivered_at ||
+            order.updated_at ||
+            order.created_at
+          ).toLocaleString(
+            "en-IN",
+            {
+              day:"2-digit",
+              month:"short",
+              hour:"2-digit",
+              minute:"2-digit"
+            }
+          );
+        }catch(e){}
+
+        return `
+          <div class="profile-delivered-row">
+            <div class="profile-delivered-main">
+              <strong>
+                Table ${escapeHTML(order.table_number)}
+                ·
+                ${escapeHTML(order.order_number || "")}
+              </strong>
+              <span>
+                ${Number(order.total_items || 0)}
+                ${Number(order.total_items || 0) === 1 ? "item" : "items"}
+                ${when ? ` · ${escapeHTML(when)}` : ""}
+              </span>
+            </div>
+
+            <div class="profile-delivered-total">
+              <strong>${orderMoney(order.total_amount)}</strong>
+              <span>Delivered</span>
+            </div>
+          </div>
+        `;
+      }
+    ).join("");
+}
+
+
+async function loadDeliveredOrders(){
+
+  if(deliveredOrdersLoading){
+    return;
+  }
+
+  const session =
+    currentStaffSession();
+
+  const businessUserId =
+    getBusinessOwnerId(session);
+
+  if(!businessUserId){
+    return;
+  }
+
+  deliveredOrdersLoading = true;
+
+  try{
+
+    const { data, error } =
+      await db.rpc(
+        "get_staff_delivered_orders",
+        {
+          p_business_user_id:
+            businessUserId
+        }
+      );
+
+    if(error){
+      throw error;
+    }
+
+    deliveredOrders =
+      Array.isArray(data)
+        ? data
+        : [];
+
+    renderDeliveredOrders();
+
+  }catch(error){
+
+    console.error(
+      "Delivered orders load:",
+      error
+    );
+
+  }finally{
+
+    deliveredOrdersLoading = false;
+
+  }
+
+}
+
+
+function renderOrders(){
+
+  if(!ordersList){
+    return;
+  }
+
+
+  if(!currentOrders.length){
+
+    ordersList.innerHTML =
+      `
+        <div class="orders-empty">
+          <i class="fa-solid fa-receipt"></i>
+          <strong>No active orders</strong>
+          <span>
+            Send a table order from Home.
+          </span>
+        </div>
+      `;
+
+    return;
+  }
+
+
+  const visibleOrders =
+    currentOrders.filter(
+      order =>
+        String(
+          order.order_status ||
+          "open"
+        ).toLowerCase() === "open"
+    );
+
+  if(!visibleOrders.length){
+    ordersList.innerHTML =
+      `
+        <div class="orders-empty">
+          <i class="fa-solid fa-receipt"></i>
+          <strong>No active orders</strong>
+          <span>Delivered orders are available in Profile.</span>
+        </div>
+      `;
+    return;
+  }
+
+  ordersList.innerHTML =
+    visibleOrders
+      .map(
+        order => {
+
+          const items =
+            Array.isArray(order.items)
+              ? order.items
+              : [];
+
+
+          return `
+            <article class="order-card">
+
+              <div class="order-card-head">
+
+                <div class="order-card-table">
+                  <strong>
+                    Table ${escapeHTML(
+                      order.table_number
+                    )}
+                  </strong>
+
+                  <span>
+                    ${escapeHTML(
+                      order.order_number ||
+                      ""
+                    )}
+                  </span>
+                </div>
+
+                ${
+                  order.has_new_items
+                    ? `
+                        <span class="order-badge-new">
+                          Newly Added ${
+                            Number(
+                              order.new_items_count ||
+                              0
+                            ) > 0
+                              ? `+${Number(order.new_items_count)}`
+                              : ""
+                          }
+                        </span>
+                      `
+                    : ""
+                }
+
+              </div>
+
+
+              <div class="order-items">
+
+                ${
+                  items
+                    .map(
+                      item => `
+                        <div class="order-item-row">
+
+                          <div class="order-item-copy">
+                            <strong>
+                              ${escapeHTML(
+                                item.item_name ||
+                                ""
+                              )}
+                            </strong>
+
+                            <span>
+                              ${orderMoney(
+                                item.price
+                              )} each
+                            </span>
+                          </div>
+
+                          <div class="order-item-qty">
+                            × ${Number(
+                              item.quantity ||
+                              0
+                            )}
+                          </div>
+
+                          <div class="order-item-amount">
+                            ${orderMoney(
+                              item.amount
+                            )}
+                          </div>
+
+                        </div>
+                      `
+                    )
+                    .join("")
+                }
+
+              </div>
+
+
+              <div class="order-card-foot">
+
+                <div class="order-total">
+                  <small>
+                    ${Number(order.total_items || 0)}
+                    ${
+                      Number(order.total_items || 0) === 1
+                        ? "item"
+                        : "items"
+                    }
+                  </small>
+
+                  <strong>
+                    ${orderMoney(
+                      order.total_amount
+                    )}
+                  </strong>
+                </div>
+
+                <div class="order-card-actions">
+
+                  <button
+                    type="button"
+                    class="order-add-btn"
+                    data-order-add="${escapeHTML(
+                      order.id
+                    )}"
+                  >
+                    Add Items
+                  </button>
+
+                  ${
+                    isAdminSession()
+                      ? `
+                          <button
+                            type="button"
+                            class="order-print-btn"
+                            data-order-print="${escapeHTML(
+                              order.id
+                            )}"
+                          >
+                            <i class="fa-solid fa-print"></i>
+                            Print Bill
+                          </button>
+                        `
+                      : ""
+                  }
+
+                </div>
+
+              </div>
+
+            </article>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+
+function buildAdminReceiptHTML(
+  order
+){
+
+  const session =
+    currentStaffSession();
+
+
+  const businessName =
+    String(
+      session.business_name ||
+      "Restaurant"
+    );
+
+
+  const items =
+    Array.isArray(
+      order.items
+    )
+      ? order.items
+      : [];
+
+
+  const rows =
+    items
+      .map(
+        item => `
+          <tr>
+            <td>
+              ${escapeHTML(
+                item.item_name ||
+                ""
+              )}
+            </td>
+
+            <td class="center">
+              ${Number(
+                item.quantity ||
+                0
+              )}
+            </td>
+
+            <td class="right">
+              ${orderMoney(
+                item.price
+              )}
+            </td>
+
+            <td class="right">
+              ${orderMoney(
+                item.amount
+              )}
+            </td>
+          </tr>
+        `
+      )
+      .join("");
+
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${escapeHTML(
+  order.order_number ||
+  "Bill"
+)}</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  padding:18px;
+  font-family:Arial,sans-serif;
+  color:#111;
+  background:#fff;
+}
+
+.receipt{
+  width:72mm;
+  max-width:100%;
+  margin:0 auto;
+}
+
+.brand{
+  text-align:center;
+  font-size:18px;
+  font-weight:800;
+}
+
+.sub{
+  margin-top:4px;
+  text-align:center;
+  font-size:11px;
+}
+
+.line{
+  margin:10px 0;
+  border-top:1px dashed #333;
+}
+
+.meta{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:11px;
+  margin:4px 0;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:10px;
+}
+
+th,
+td{
+  padding:5px 2px;
+  vertical-align:top;
+  border-bottom:1px dashed #bbb;
+}
+
+th{
+  text-align:left;
+}
+
+.center{
+  text-align:center;
+}
+
+.right{
+  text-align:right;
+}
+
+.total{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:10px;
+  font-size:14px;
+  font-weight:800;
+}
+
+.footer{
+  margin-top:14px;
+  text-align:center;
+  font-size:10px;
+}
+
+@media print{
+  body{
+    padding:0;
+  }
+
+  .receipt{
+    width:72mm;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="receipt">
+
+  <div class="brand">
+    ${escapeHTML(
+      businessName
+    )}
+  </div>
+
+  <div class="sub">
+    Table Bill
+  </div>
+
+  <div class="line"></div>
+
+  <div class="meta">
+    <span>Table</span>
+    <strong>
+      ${escapeHTML(
+        order.table_number
+      )}
+    </strong>
+  </div>
+
+  <div class="meta">
+    <span>Order</span>
+    <strong>
+      ${escapeHTML(
+        order.order_number ||
+        ""
+      )}
+    </strong>
+  </div>
+
+  <div class="meta">
+    <span>Staff</span>
+    <strong>
+      ${escapeHTML(
+        session.name ||
+        "Admin"
+      )}
+    </strong>
+  </div>
+
+  <div class="line"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th class="center">Qty</th>
+        <th class="right">Rate</th>
+        <th class="right">Amt</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      ${rows}
+    </tbody>
+  </table>
+
+  <div class="total">
+    <span>
+      Total
+    </span>
+
+    <span>
+      ${orderMoney(
+        order.total_amount
+      )}
+    </span>
+  </div>
+
+  <div class="footer">
+    Thank you, visit again
+  </div>
+
+</div>
+
+<script>
+window.addEventListener(
+  "load",
+  () => {
+    setTimeout(
+      () => {
+        window.print();
+      },
+      120
+    );
+  }
+);
+<\/script>
+
+</body>
+</html>
+  `;
+
+}
+
+
+function printOrderForAdmin(
+  orderId
+){
+
+  const session =
+    currentStaffSession();
+
+
+  if(
+    !isAdminSession(
+      session
+    )
+  ){
+
+    showToast(
+      "Print Bill is available only for admin.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const order =
+    currentOrders.find(
+      row =>
+        String(
+          row.id
+        ) ===
+        String(
+          orderId
+        )
+    );
+
+
+  if(!order){
+
+    showToast(
+      "Order not found.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    String(
+      order.order_status ||
+      "open"
+    )
+    .toLowerCase() !==
+    "open"
+  ){
+
+    showToast(
+      "This order is already completed.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const printWindow =
+    window.open(
+      "",
+      "_blank",
+      "width=480,height=720"
+    );
+
+
+  if(!printWindow){
+
+    showToast(
+      "Allow pop-ups to print the bill.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  printWindow.document.open();
+
+  printWindow.document.write(
+    buildAdminReceiptHTML(
+      order
+    )
+  );
+
+  printWindow.document.close();
+
+}
+
+
+async function loadOrders(
+  options = {}
+){
+
+  const session =
+    currentStaffSession();
+
+
+  const businessUserId =
+    getBusinessOwnerId(
+      session
+    );
+
+
+  if(
+    !businessUserId ||
+    ordersLoading
+  ){
+    return;
+  }
+
+
+  ordersLoading =
+    true;
+
+
+  if(
+    options.showLoading &&
+    ordersList
+  ){
+
+    ordersList.innerHTML =
+      `
+        <div class="orders-empty">
+          <i class="fa-solid fa-circle-notch fa-spin"></i>
+          <strong>Loading orders</strong>
+        </div>
+      `;
+
+  }
+
+
+  ordersRefreshBtn
+    ?.classList
+    .add(
+      "loading"
+    );
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        "get_staff_table_orders",
+        {
+          p_business_user_id:
+            businessUserId
+        }
+      );
+
+
+    if(error){
+      throw error;
+    }
+
+
+    currentOrders =
+      Array.isArray(data)
+        ? data
+        : [];
+
+
+    renderOrders();
+
+    loadDeliveredOrders();
+
+
+  }catch(error){
+
+    console.error(
+      "Orders load:",
+      error
+    );
+
+
+    if(ordersList){
+
+      ordersList.innerHTML =
+        `
+          <div class="orders-empty">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <strong>Could not load orders</strong>
+            <span>
+              ${escapeHTML(
+                error?.message ||
+                "Try again."
+              )}
+            </span>
+          </div>
+        `;
+
+    }
+
+
+  }finally{
+
+    ordersLoading =
+      false;
+
+
+    ordersRefreshBtn
+      ?.classList
+      .remove(
+        "loading"
+      );
+
+  }
+
+}
+
+
+function startOrdersRealtime(
+  session
+){
+
+  const businessUserId =
+    getBusinessOwnerId(
+      session
+    );
+
+
+  if(!businessUserId){
+    return;
+  }
+
+
+  if(ordersRealtimeChannel){
+
+    db.removeChannel(
+      ordersRealtimeChannel
+    );
+
+    ordersRealtimeChannel =
+      null;
+
+  }
+
+
+  ordersRealtimeChannel =
+    db.channel(
+      `staff-orders-${businessUserId}`
+    )
+    .on(
+      "postgres_changes",
+      {
+        event:"*",
+        schema:"public",
+        table:"staff_table_orders",
+        filter:`business_user_id=eq.${businessUserId}`
+      },
+      () => {
+
+        loadOrders();
+        loadDeliveredOrders();
+
+      }
+    )
+    .subscribe();
+
+}
+
+
+function getOrderAddCategories(){
+
+  const categories =
+    Array.from(
+      new Set(
+        currentMenuItems
+          .filter(
+            item =>
+              item.is_available !==
+              false
+          )
+          .map(
+            item =>
+              String(
+                item.category ||
+                "Other"
+              )
+              .trim() ||
+              "Other"
+          )
+      )
+    )
+    .sort(
+      (
+        a,
+        b
+      ) =>
+        a.localeCompare(b)
+    );
+
+
+  return [
+    "All",
+    ...categories
+  ];
+
+}
+
+
+function renderOrderAddCategories(){
+
+  const categories =
+    getOrderAddCategories();
+
+
+  if(
+    !categories.includes(
+      orderAddCategory
+    )
+  ){
+    orderAddCategory =
+      "All";
+  }
+
+
+  orderAddCategories.innerHTML =
+    categories
+      .map(
+        category => `
+          <button
+            type="button"
+            class="order-add-cat ${
+              category === orderAddCategory
+                ? "active"
+                : ""
+            }"
+            data-order-category="${escapeHTML(
+              category
+            )}"
+          >
+            ${escapeHTML(category)}
+          </button>
+        `
+      )
+      .join("");
+
+}
+
+
+function orderAddControl(item){
+
+  const id =
+    String(item.id);
+
+
+  const qty =
+    Number(
+      orderAddQty.get(id) ||
+      0
+    );
+
+
+  if(qty <= 0){
+
+    return `
+      <button
+        type="button"
+        class="order-sheet-add"
+        data-order-sheet-add="${escapeHTML(id)}"
+      >
+        Add
+      </button>
+    `;
+
+  }
+
+
+  return `
+    <div class="order-sheet-qty">
+
+      <button
+        type="button"
+        data-order-sheet-dec="${escapeHTML(id)}"
+      >
+        <i class="fa-solid fa-minus"></i>
+      </button>
+
+      <span>${qty}</span>
+
+      <button
+        type="button"
+        data-order-sheet-inc="${escapeHTML(id)}"
+      >
+        <i class="fa-solid fa-plus"></i>
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+function renderOrderAddGrid(){
+
+  const q =
+    String(
+      orderAddSearch?.value ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  const rows =
+    currentMenuItems.filter(
+      item => {
+
+        if(
+          item.is_available ===
+          false
+        ){
+          return false;
+        }
+
+
+        const category =
+          String(
+            item.category ||
+            "Other"
+          )
+          .trim() ||
+          "Other";
+
+
+        if(
+          orderAddCategory !== "All" &&
+          category !== orderAddCategory
+        ){
+          return false;
+        }
+
+
+        if(
+          q &&
+          !String(
+            item.item_name ||
+            ""
+          )
+          .toLowerCase()
+          .includes(q)
+        ){
+          return false;
+        }
+
+
+        return true;
+
+      }
+    );
+
+
+  if(!rows.length){
+
+    orderAddGrid.innerHTML =
+      `
+        <div
+          class="orders-empty"
+          style="grid-column:1/-1;min-height:160px"
+        >
+          <strong>No items found</strong>
+        </div>
+      `;
+
+    updateOrderAddSummary();
+    return;
+
+  }
+
+
+  orderAddGrid.innerHTML =
+    rows
+      .map(
+        item => `
+          <article class="order-add-card">
+
+            ${
+              item.image_url
+                ? `
+                    <img
+                      class="order-add-card-img"
+                      src="${escapeHTML(
+                        item.image_url
+                      )}"
+                      alt=""
+                    >
+                  `
+                : `
+                    <div class="order-add-card-img-empty">
+                      <i class="fa-solid fa-image"></i>
+                    </div>
+                  `
+            }
+
+            <div class="order-add-card-body">
+
+              <div class="order-add-card-name">
+                ${escapeHTML(
+                  item.item_name ||
+                  ""
+                )}
+              </div>
+
+              <div class="order-add-card-bottom">
+
+                <span class="order-add-card-price">
+                  ${orderMoney(
+                    item.price
+                  )}
+                </span>
+
+                <div data-order-sheet-control="${escapeHTML(item.id)}">
+                  ${orderAddControl(item)}
+                </div>
+
+              </div>
+
+            </div>
+
+          </article>
+        `
+      )
+      .join("");
+
+
+  updateOrderAddSummary();
+
+}
+
+
+function updateOrderAddSummary(){
+
+  let qty =
+    0;
+
+  let total =
+    0;
+
+
+  currentMenuItems.forEach(
+    item => {
+
+      const count =
+        Number(
+          orderAddQty.get(
+            String(item.id)
+          ) ||
+          0
+        );
+
+
+      if(count <= 0){
+        return;
+      }
+
+
+      qty +=
+        count;
+
+
+      total +=
+        count *
+        Number(
+          item.price ||
+          0
+        );
+
+    }
+  );
+
+
+  orderAddSummary.textContent =
+    `${qty} ${
+      qty === 1
+        ? "item"
+        : "items"
+    } · ${orderMoney(total)}`;
+
+
+  orderAddSave.disabled =
+    qty <= 0;
+
+}
+
+
+function openOrderAddSheet(
+  orderId
+){
+
+  const order =
+    currentOrders.find(
+      row =>
+        String(row.id) ===
+        String(orderId)
+    );
+
+
+  if(!order){
+    return;
+  }
+
+
+  orderAddCurrentOrder =
+    order;
+
+
+  orderAddQty.clear();
+
+  orderAddCategory =
+    "All";
+
+
+  orderAddSearch.value =
+    "";
+
+
+  orderAddTitle.textContent =
+    "Add Items";
+
+
+  orderAddSubtitle.textContent =
+    `Table ${order.table_number}`;
+
+
+  renderOrderAddCategories();
+  renderOrderAddGrid();
+
+
+  orderAddCategories.scrollLeft =
+    0;
+
+
+  orderAddBackdrop.classList.add(
+    "show"
+  );
+
+
+  orderAddSheet.classList.add(
+    "show"
+  );
+
+
+  orderAddSheet.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+
+function closeOrderAddSheet(){
+
+  orderAddBackdrop.classList.remove(
+    "show"
+  );
+
+
+  orderAddSheet.classList.remove(
+    "show"
+  );
+
+
+  orderAddSheet.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  orderAddCurrentOrder =
+    null;
+
+
+  orderAddQty.clear();
+
+}
+
+
+function updateOneOrderSheetControl(
+  itemId
+){
+
+  const item =
+    currentMenuItems.find(
+      row =>
+        String(row.id) ===
+        String(itemId)
+    );
+
+
+  if(!item){
+    return;
+  }
+
+
+  const holder =
+    Array.from(
+      document.querySelectorAll(
+        "[data-order-sheet-control]"
+      )
+    )
+    .find(
+      el =>
+        String(
+          el.dataset.orderSheetControl
+        ) ===
+        String(itemId)
+    );
+
+
+  if(holder){
+
+    holder.innerHTML =
+      orderAddControl(item);
+
+  }
+
+
+  updateOrderAddSummary();
+
+}
+
+
+function buildAddedOrderItems(){
+
+  const rows =
+    [];
+
+
+  currentMenuItems.forEach(
+    item => {
+
+      const qty =
+        Number(
+          orderAddQty.get(
+            String(item.id)
+          ) ||
+          0
+        );
+
+
+      if(qty <= 0){
+        return;
+      }
+
+
+      const price =
+        Number(
+          item.price ||
+          0
+        );
+
+
+      rows.push({
+        item_id:
+          String(item.id),
+
+        item_name:
+          String(
+            item.item_name ||
+            ""
+          ),
+
+        category:
+          String(
+            item.category ||
+            ""
+          ),
+
+        price,
+
+        quantity:
+          qty,
+
+        amount:
+          price * qty,
+
+        image_url:
+          String(
+            item.image_url ||
+            ""
+          ),
+
+        newly_added:
+          true
+      });
+
+    }
+  );
+
+
+  return rows;
+
+}
+
+
+async function saveOrderAddedItems(){
+
+  const session =
+    currentStaffSession();
+
+
+  if(
+    !orderAddCurrentOrder
+  ){
+    return;
+  }
+
+
+  const addedItems =
+    buildAddedOrderItems();
+
+
+  if(!addedItems.length){
+
+    showToast(
+      "Add items first.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  orderAddSave.disabled =
+    true;
+
+
+  orderAddSave.classList.add(
+    "loading"
+  );
+
+
+  orderAddSave.textContent =
+    "Saving...";
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        "add_items_to_staff_table_order",
+        {
+          p_order_id:
+            orderAddCurrentOrder.id,
+
+          p_business_user_id:
+            getBusinessOwnerId(
+              session
+            ),
+
+          p_added_by_account_id:
+            String(
+              session.account_id ||
+              ""
+            ),
+
+          p_added_by_name:
+            String(
+              session.name ||
+              "Staff"
+            ),
+
+          p_items:
+            addedItems
+        }
+      );
+
+
+    if(error){
+      throw error;
+    }
+
+
+    const result =
+      Array.isArray(data)
+        ? data[0]
+        : data;
+
+
+    if(!result?.success){
+
+      throw new Error(
+        result?.message ||
+        "Could not update order."
+      );
+
+    }
+
+
+    const updatedTable =
+      orderAddCurrentOrder.table_number;
+
+
+    closeOrderAddSheet();
+
+
+    await loadOrders();
+
+
+    showToast(
+      `Table ${updatedTable} order updated.`,
+      "success"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Add order items:",
+      error
+    );
+
+
+    showToast(
+      error?.message ||
+      "Could not update order.",
+      "error"
+    );
+
+
+  }finally{
+
+    orderAddSave.classList.remove(
+      "loading"
+    );
+
+
+    orderAddSave.textContent =
+      "Save";
+
+
+    orderAddSave.disabled =
+      false;
+
+  }
+
+}
+
+
+cartSendBtn
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if(
+        !requireTableSelection()
+      ){
+        return;
+      }
+
+
+      const session =
+        currentStaffSession();
+
+
+      const items =
+        buildCartOrderItems();
+
+
+      if(!items.length){
+
+        showToast(
+          "Add items first.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const totalItems =
+        items.reduce(
+          (
+            sum,
+            item
+          ) =>
+            sum +
+            Number(
+              item.quantity ||
+              0
+            ),
+          0
+        );
+
+
+      const totalAmount =
+        items.reduce(
+          (
+            sum,
+            item
+          ) =>
+            sum +
+            Number(
+              item.amount ||
+              0
+            ),
+          0
+        );
+
+
+      const sendingTable =
+        String(
+          selectedTableNumber
+        );
+
+
+      cartSendBtn.disabled =
+        true;
+
+
+      cartSendBtn.textContent =
+        "Sending...";
+
+
+      try{
+
+        const {
+          data,
+          error
+        } =
+          await db.rpc(
+            "create_staff_table_order",
+            {
+              p_business_user_id:
+                getBusinessOwnerId(
+                  session
+                ),
+
+              p_staff_account_id:
+                String(
+                  session.account_id ||
+                  ""
+                ),
+
+              p_staff_name:
+                String(
+                  session.name ||
+                  "Staff"
+                ),
+
+              p_table_number:
+                Number(
+                  sendingTable
+                ),
+
+              p_items:
+                items,
+
+              p_total_items:
+                totalItems,
+
+              p_total_amount:
+                totalAmount
+            }
+          );
+
+
+        if(error){
+          throw error;
+        }
+
+
+        const result =
+          Array.isArray(data)
+            ? data[0]
+            : data;
+
+
+        if(!result?.success){
+
+          throw new Error(
+            result?.message ||
+            "Could not send order."
+          );
+
+        }
+
+
+        /*
+          Clear only the cart that was sent.
+          Other table carts stay untouched.
+        */
+        const sentCart =
+          getTableCart(
+            sendingTable
+          );
+
+
+        sentCart.clear();
+
+
+        if(
+          selectedTableNumber ===
+          sendingTable
+        ){
+
+          selectedItemQty =
+            sentCart;
+
+
+          renderBusinessMenu(
+            currentMenuItems
+          );
+
+        }
+
+
+        await loadOrders();
+
+
+        showToast(
+          `Table ${sendingTable} order sent.`,
+          "success"
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "Send table order:",
+          error
+        );
+
+
+        showToast(
+          error?.message ||
+          "Could not send order.",
+          "error"
+        );
+
+
+      }finally{
+
+        cartSendBtn.textContent =
+          "Send";
+
+
+        updateCartSummary();
+
+      }
+
+    }
+  );
+
+itemsGrid.addEventListener(
+  "click",
+  event => {
+
+    const add =
+      event.target.closest(
+        "[data-add-item]"
+      );
+
+
+    if(add){
+
+      if(
+        !requireTableSelection()
+      ){
+        return;
+      }
+
+
+      const id =
+        String(
+          add.dataset.addItem
+        );
+
+
+      if(
+        itemClickLocks.has(id)
+      ){
+        return;
+      }
+
+
+      itemClickLocks.add(id);
+
+
+      selectedItemQty.set(
+        id,
+        1
+      );
+
+
+      updateOneItemControl(id);
+
+
+      setTimeout(
+        () => {
+
+          itemClickLocks.delete(id);
+
+        },
+        180
+      );
+
+
+      return;
+
+    }
+
+
+    const inc =
+      event.target.closest(
+        "[data-inc-item]"
+      );
+
+
+    if(inc){
+
+      if(
+        !requireTableSelection()
+      ){
+        return;
+      }
+
+
+      const id =
+        String(
+          inc.dataset.incItem
+        );
+
+
+      if(
+        itemClickLocks.has(id)
+      ){
+        return;
+      }
+
+
+      itemClickLocks.add(id);
+
+
+      const current =
+        Number(
+          selectedItemQty.get(id) ||
+          0
+        );
+
+
+      selectedItemQty.set(
+        id,
+        current + 1
+      );
+
+
+      updateOneItemControl(id);
+
+
+      setTimeout(
+        () => {
+
+          itemClickLocks.delete(id);
+
+        },
+        140
+      );
+
+
+      return;
+
+    }
+
+
+    const dec =
+      event.target.closest(
+        "[data-dec-item]"
+      );
+
+
+    if(dec){
+
+      const id =
+        String(
+          dec.dataset.decItem
+        );
+
+
+      if(
+        itemClickLocks.has(id)
+      ){
+        return;
+      }
+
+
+      itemClickLocks.add(id);
+
+
+      const current =
+        Number(
+          selectedItemQty.get(id) ||
+          0
+        );
+
+
+      const next =
+        Math.max(
+          0,
+          current - 1
+        );
+
+
+      if(next <= 0){
+
+        selectedItemQty.delete(id);
+
+      }else{
+
+        selectedItemQty.set(
+          id,
+          next
+        );
+
+      }
+
+
+      updateOneItemControl(id);
+
+
+      setTimeout(
+        () => {
+
+          itemClickLocks.delete(id);
+
+        },
+        140
+      );
+
+    }
+
+  }
+);
+
+
+
+ordersRefreshBtn
+  ?.addEventListener(
+    "click",
+    () => {
+
+      loadOrders({
+        showLoading:true
+      });
+
+    }
+  );
+
+
+ordersList
+  ?.addEventListener(
+    "click",
+    event => {
+
+      const printButton =
+        event.target.closest(
+          "[data-order-print]"
+        );
+
+
+      if(printButton){
+
+        printOrderForAdmin(
+          printButton.dataset.orderPrint
+        );
+
+        return;
+
+      }
+
+
+      const button =
+        event.target.closest(
+          "[data-order-add]"
+        );
+
+
+      if(!button){
+        return;
+      }
+
+
+      openOrderAddSheet(
+        button.dataset.orderAdd
+      );
+
+    }
+  );
+
+
+orderAddClose
+  ?.addEventListener(
+    "click",
+    closeOrderAddSheet
+  );
+
+
+orderAddBackdrop
+  ?.addEventListener(
+    "click",
+    closeOrderAddSheet
+  );
+
+
+orderAddSearch
+  ?.addEventListener(
+    "input",
+    renderOrderAddGrid
+  );
+
+
+orderAddCategories
+  ?.addEventListener(
+    "click",
+    event => {
+
+      const button =
+        event.target.closest(
+          "[data-order-category]"
+        );
+
+
+      if(!button){
+        return;
+      }
+
+
+      orderAddCategory =
+        button.dataset.orderCategory;
+
+
+      renderOrderAddCategories();
+      renderOrderAddGrid();
+
+
+      requestAnimationFrame(
+        () => {
+
+          orderAddCategories
+            .querySelector(
+              ".order-add-cat.active"
+            )
+            ?.scrollIntoView({
+              behavior:"smooth",
+              block:"nearest",
+              inline:"center"
+            });
+
+        }
+      );
+
+    }
+  );
+
+
+orderAddGrid
+  ?.addEventListener(
+    "click",
+    event => {
+
+      const add =
+        event.target.closest(
+          "[data-order-sheet-add]"
+        );
+
+
+      if(add){
+
+        const id =
+          String(
+            add.dataset.orderSheetAdd
+          );
+
+
+        orderAddQty.set(
+          id,
+          1
+        );
+
+
+        updateOneOrderSheetControl(
+          id
+        );
+
+        return;
+
+      }
+
+
+      const inc =
+        event.target.closest(
+          "[data-order-sheet-inc]"
+        );
+
+
+      if(inc){
+
+        const id =
+          String(
+            inc.dataset.orderSheetInc
+          );
+
+
+        orderAddQty.set(
+          id,
+          Number(
+            orderAddQty.get(id) ||
+            0
+          ) + 1
+        );
+
+
+        updateOneOrderSheetControl(
+          id
+        );
+
+        return;
+
+      }
+
+
+      const dec =
+        event.target.closest(
+          "[data-order-sheet-dec]"
+        );
+
+
+      if(dec){
+
+        const id =
+          String(
+            dec.dataset.orderSheetDec
+          );
+
+
+        const next =
+          Math.max(
+            0,
+            Number(
+              orderAddQty.get(id) ||
+              0
+            ) - 1
+          );
+
+
+        if(next <= 0){
+
+          orderAddQty.delete(
+            id
+          );
+
+        }else{
+
+          orderAddQty.set(
+            id,
+            next
+          );
+
+        }
+
+
+        updateOneOrderSheetControl(
+          id
+        );
+
+      }
+
+    }
+  );
+
+
+orderAddSave
+  ?.addEventListener(
+    "click",
+    saveOrderAddedItems
+  );
+
+
+/* =========================================================
+   LOAD EVERYTHING FOR BUSINESS
+========================================================= */
+
+async function loadMainBusinessData(
+  session
+){
+
+  try{
+
+    /*
+      Business name + real uploaded logo
+    */
+
+    const setup =
+      await loadBusinessSetup(
+        session
+      );
+
+
+    lastBusinessSetup =
+      setup;
+
+
+    applyBusinessSetup(
+      setup,
+      session
+    );
+
+
+    await loadBusinessTotalSeating(
+      session,
+      setup
+    );
+
+
+    /*
+      Real menu items
+    */
+
+    await loadBusinessMenu(
+      session
+    );
+
+
+    startBusinessRealtime(
+      session
+    );
+
+
+    startOrdersRealtime(
+      session
+    );
+
+
+    await Promise.allSettled([
+      loadOrders(),
+      loadDeliveredOrders()
+    ]);
+
+
+  }catch(error){
+
+    console.error(
+      "Business data load error:",
+      error
+    );
+
+
+    itemsGrid.className =
+      "home-items-area";
+
+
+    itemsGrid.innerHTML =
+      `
+        <div class="load-error">
+
+          <i class="fa-solid fa-triangle-exclamation"></i>
+
+          <strong>
+            Could not load business data
+          </strong>
+
+          <span>
+            ${escapeHTML(
+              error?.message ||
+              "Please try again."
+            )}
+          </span>
+
+        </div>
+      `;
+
+
+    showToast(
+      error?.message ||
+      "Could not load business data.",
+      "error"
+    );
+
+  }
+
+}
+
+
+
+function startBusinessRealtime(
+  session
+){
+
+  const ownerId =
+    getBusinessOwnerId(
+      session
+    );
+
+
+  if(!ownerId){
+    return;
+  }
+
+
+  if(
+    businessRealtimeChannel
+  ){
+
+    db.removeChannel(
+      businessRealtimeChannel
+    );
+
+    businessRealtimeChannel =
+      null;
+
+  }
+
+
+  businessRealtimeChannel =
+    db.channel(
+      `staff-business-live-${ownerId}-${Date.now()}`
+    )
+
+
+    /*
+      Business settings / total seating
+    */
+    .on(
+      "postgres_changes",
+      {
+        event:"*",
+        schema:"public",
+        table:"business_setups",
+        filter:`user_id=eq.${ownerId}`
+      },
+      async () => {
+
+        try{
+
+          const setup =
+            await loadBusinessSetup(
+              session
+            );
+
+
+          lastBusinessSetup =
+            setup;
+
+
+          applyBusinessSetup(
+            setup,
+            session
+          );
+
+
+          await loadBusinessTotalSeating(
+            session,
+            setup
+          );
+
+        }catch(error){
+
+          console.warn(
+            "Live business refresh:",
+            error
+          );
+
+        }
+
+      }
+    )
+
+
+    /*
+      Menu insert / update / delete.
+      Force a silent fetch because RPC output is the source of truth.
+    */
+    .on(
+      "postgres_changes",
+      {
+        event:"*",
+        schema:"public",
+        table:"billing_menu_items",
+        filter:`user_id=eq.${ownerId}`
+      },
+      () => {
+
+        checkBusinessMenuLive(
+          session,
+          {
+            force:true
+          }
+        );
+
+      }
+    )
+
+
+    .subscribe(
+      status => {
+
+        menuRealtimeStatus =
+          status;
+
+
+        if(
+          status ===
+          "SUBSCRIBED"
+        ){
+
+          /*
+            One silent sync immediately after socket connection.
+          */
+          checkBusinessMenuLive(
+            session,
+            {
+              force:true
+            }
+          );
+
+        }
+
+
+        if(
+          status ===
+            "CHANNEL_ERROR" ||
+          status ===
+            "TIMED_OUT" ||
+          status ===
+            "CLOSED"
+        ){
+
+          console.warn(
+            "Menu realtime status:",
+            status
+          );
+
+        }
+
+      }
+    );
+
+
+  startMenuFallbackLiveCheck(
+    session
+  );
+
+}
+
+
+/*
+  When the user returns to the app/tab, sync immediately.
+  No spinner, no page refresh.
+*/
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if(document.hidden){
+      return;
+    }
+
+
+    const session =
+      getSession();
+
+
+    if(
+      session?.logged_in
+    ){
+
+      checkBusinessMenuLive(
+        session,
+        {
+          force:true
+        }
+      );
+
+    }
+
+  }
+);
+
+
+window.addEventListener(
+  "focus",
+  () => {
+
+    const session =
+      getSession();
+
+
+    if(
+      session?.logged_in
+    ){
+
+      checkBusinessMenuLive(
+        session
+      );
+
+    }
+
+  }
+);
+
+
+window.addEventListener(
+  "online",
+  () => {
+
+    const session =
+      getSession();
+
+
+    if(
+      session?.logged_in
+    ){
+
+      checkBusinessMenuLive(
+        session,
+        {
+          force:true
+        }
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   SCREEN
+========================================================= */
+
+function openLogin(){
+
+  mainScreen.classList.add(
+    "hidden"
+  );
+
+  loginScreen.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+async function openMain(
+  session
+){
+
+  loginScreen.classList.add(
+    "hidden"
+  );
+
+  mainScreen.classList.remove(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "profileName"
+  ).textContent =
+    session.name ||
+    "Staff";
+
+
+  document.getElementById(
+    "profileRole"
+  ).textContent =
+    isAdminSession(
+      session
+    )
+      ? "admin"
+      : (
+          session.role ||
+          "staff"
+        );
+
+
+  document.getElementById(
+    "profileMobile"
+  ).textContent =
+    session.mobile ||
+    "—";
+
+
+  switchTab(
+    "home"
+  );
+
+
+  await loadMainBusinessData(
+    session
+  );
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+mobileInput.addEventListener(
+  "input",
+  () => {
+
+    mobileInput.value =
+      mobileInput.value
+        .replace(/\D/g,"")
+        .slice(0,10);
+
+  }
+);
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+passwordEye.addEventListener(
+  "click",
+  () => {
+
+    const hidden =
+      passwordInput.type ===
+      "password";
+
+
+    passwordInput.type =
+      hidden
+        ? "text"
+        : "password";
+
+
+    passwordEye.innerHTML =
+      hidden
+        ? '<i class="fa-regular fa-eye-slash"></i>'
+        : '<i class="fa-regular fa-eye"></i>';
+
+  }
+);
+
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+const navButtons =
+  document.querySelectorAll(
+    ".nav-btn"
+  );
+
+
+const pages = {
+
+  home:
+    document.getElementById(
+      "homePage"
+    ),
+
+  orders:
+    document.getElementById(
+      "ordersPage"
+    ),
+
+  profile:
+    document.getElementById(
+      "profilePage"
+    )
+
+};
+
+
+function switchTab(tab){
+
+  Object.values(
+    pages
+  ).forEach(
+    page => {
+
+      page.classList.remove(
+        "active"
+      );
+
+    }
+  );
+
+
+  navButtons.forEach(
+    button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.tab ===
+        tab
+      );
+
+    }
+  );
+
+
+  pages[tab]
+    ?.classList
+    .add(
+      "active"
+    );
+
+
+  /*
+    Home tab switch does not force a full reload.
+    Supabase realtime keeps menu/table data current.
+  */
+
+
+  if(
+    tab === "orders"
+  ){
+    loadOrders();
+  }
+
+  if(
+    tab === "profile"
+  ){
+    loadDeliveredOrders();
+  }
+
+}
+
+
+navButtons.forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        switchTab(
+          button.dataset.tab
+        );
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   REAL LOGIN
+========================================================= */
+
+loginForm.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+
+    const mobile =
+      mobileInput.value
+        .replace(/\D/g,"")
+        .slice(-10);
+
+
+    const password =
+      passwordInput.value;
+
+
+    if(
+      !/^[6-9]\d{9}$/.test(
+        mobile
+      )
+    ){
+
+      showToast(
+        "Enter a valid mobile number.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if(!password){
+
+      showToast(
+        "Enter your password.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    setLoginState(
+      "loading"
+    );
+
+
+    try{
+
+
+      const {
+        data,
+        error
+      } =
+        await db.rpc(
+          "login_billing_staff",
+          {
+
+            p_mobile:
+              mobile,
+
+            p_password:
+              password
+
+          }
+        );
+
+
+      if(error){
+
+        throw error;
+
+      }
+
+
+      const result =
+        Array.isArray(data)
+          ? data[0]
+          : data;
+
+
+      if(
+        !result?.success
+      ){
+
+        setLoginState(
+          "idle"
+        );
+
+
+        showToast(
+          result?.message ||
+          "Invalid mobile number or password.",
+          "error"
+        );
+
+
+        return;
+
+      }
+
+
+      const session = {
+
+        logged_in:
+          true,
+
+
+        account_type:
+          result.account_type,
+
+
+        account_id:
+          result.account_id,
+
+
+        owner_user_id:
+          result.owner_user_id,
+
+
+        name:
+          result.display_name,
+
+
+        mobile:
+          result.mobile_number,
+
+
+        role:
+          result.role,
+
+
+        business_name:
+          result.business_name ||
+          "",
+
+
+        login_at:
+          new Date().toISOString()
+
+      };
+
+
+      saveSession(
+        session
+      );
+
+
+      setLoginState(
+        "success"
+      );
+
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            400
+          )
+      );
+
+
+      await openMain(
+        session
+      );
+
+
+      passwordInput.value =
+        "";
+
+
+      setLoginState(
+        "idle"
+      );
+
+
+    }catch(error){
+
+
+      console.error(
+        "Login error:",
+        error
+      );
+
+
+      setLoginState(
+        "idle"
+      );
+
+
+      showToast(
+        [
+          error?.message,
+          error?.details,
+          error?.hint
+        ]
+        .filter(Boolean)
+        .join(" · ") ||
+        "Unable to login.",
+        "error"
+      );
+
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   REFRESH SESSION
+========================================================= */
+
+async function startApp(){
+
+  const session =
+    getSession();
+
+
+  if(
+    !session?.logged_in
+  ){
+
+    openLogin();
+
+
+    document.body.classList.add(
+      "ready"
+    );
+
+
+    return;
+
+  }
+
+
+  try{
+
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        "validate_billing_staff_session",
+        {
+
+          p_account_type:
+            session.account_type,
+
+
+          p_account_id:
+            session.account_id,
+
+
+          p_owner_user_id:
+            session.owner_user_id ||
+            null
+
+        }
+      );
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    const result =
+      Array.isArray(data)
+        ? data[0]
+        : data;
+
+
+    if(
+      result?.valid
+    ){
+
+
+      session.name =
+        result.display_name ||
+        session.name;
+
+
+      session.role =
+        result.role ||
+        session.role;
+
+
+      session.account_type =
+        result.account_type ||
+        session.account_type;
+
+
+      session.business_name =
+        result.business_name ||
+        session.business_name ||
+        "";
+
+
+      saveSession(
+        session
+      );
+
+
+      await openMain(
+        session
+      );
+
+
+    }else{
+
+
+      removeSession();
+
+
+      openLogin();
+
+
+    }
+
+
+  }catch(error){
+
+
+    console.error(
+      "Session validation error:",
+      error
+    );
+
+
+    removeSession();
+
+
+    openLogin();
+
+
+  }
+
+
+  document.body.classList.add(
+    "ready"
+  );
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+logoutBtn.addEventListener(
+  "click",
+  () => {
+
+    if(menuLiveCheckTimer){
+      clearInterval(menuLiveCheckTimer);
+      menuLiveCheckTimer = null;
+    }
+
+    if(businessRealtimeChannel){
+      db.removeChannel(businessRealtimeChannel);
+      businessRealtimeChannel = null;
+    }
+
+    removeSession();
+
+
+    mobileInput.value =
+      "";
+
+
+    passwordInput.value =
+      "";
+
+
+    openLogin();
+
+  }
+);
+
+
+/* =========================================================
+   FORGOT
+========================================================= */
+
+forgotBtn.addEventListener(
+  "click",
+  () => {
+
+    showToast(
+      "Contact your admin to reset password."
+    );
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+startApp();
+
+</script>
+
+</body>
+</html>
